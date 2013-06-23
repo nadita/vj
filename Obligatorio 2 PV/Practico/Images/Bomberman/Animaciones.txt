@@ -1,0 +1,6 @@
+
+Animaciones de bomberman
+
+Camina 				- frames del 30-60
+Corre 				- frames del 135-165
+Se prepara para tirar la bomba 	- frames del 240-260
