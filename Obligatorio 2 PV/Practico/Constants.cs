@@ -9,5 +9,16 @@ namespace Practico
     {
         public static int WIDTH = 1024;
         public static int HEIGHT = 768;
+
+        //Font
+        public const string FONT_NAME = "tahoma";
+        public const int FONT_HEIGHT = 24;
+        public const int FONT_BOLD = 1;
+        public const int FONT_ITALIC = 0;
+        public const int FONT_UNDERLINED = 1;
+
+        public const int FONT_COLOR_RED = 255;
+        public const int FONT_COLOR_GREEN = 255;
+        public const int FONT_COLOR_BLUE = 255;
     }
 }
