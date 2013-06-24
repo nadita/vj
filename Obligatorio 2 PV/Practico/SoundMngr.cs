@@ -20,6 +20,17 @@ namespace Practico
         public int CHANNEL_BOMB = 0;
         public float MUSIC_VOLUMEN = 0.5F;
         public int BOMB = 0;
+        private static SoundMngr instancia = null;
+
+        private SoundMngr() { }
+        public static SoundMngr GetInstancia()
+        {
+            if (instancia == null) {
+                instancia = new SoundMngr();
+            }
+            return instancia;
+        }
+
 
         public void InitializeSounds()
         {

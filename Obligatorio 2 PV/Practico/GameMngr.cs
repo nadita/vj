@@ -9,10 +9,11 @@ namespace Practico
 {
     public class GameMngr
     {
-        private Game game = new Game();
-        private GraphicMngr graphicMngr = new GraphicMngr();
-        private SoundMngr soundMngr = new SoundMngr();
-        //private XmlMngr xmlMngr = new XmlMngr();
+        private Game game = Game.GetInstancia();
+        private GraphicMngr graphicMngr = GraphicMngr.GetInstancia();
+        private SoundMngr soundMngr = SoundMngr.GetInstancia();
+        private XmlMngr xmlMngr = XmlMngr.GetInstancia();
+        private static GameMngr instancia = null;
 
         //--GAME CONSTS-------------------------------------------------------------------
         //--------------------------------------------------------------------------------
@@ -29,6 +30,17 @@ namespace Practico
 
         //--METHODS-----------------------------------------------------------------------
         //--------------------------------------------------------------------------------
+        
+
+        private GameMngr() {}
+        public static GameMngr GetInstancia()
+        {
+            if (instancia == null) {
+                instancia = new GameMngr();
+            }
+            return instancia;
+        }
+
 
         # region --- PLAY -----------------------------------------------------------------------------------------------------------------------
         public void Play()
@@ -167,7 +179,7 @@ namespace Practico
             createBomberman();
             createLights();
             createCamera();
-
+            
             while (bb.KeyDown(bb.KEY_ESCAPE) == 0)
             {
                 bb.UpdateWorld();
@@ -262,7 +274,7 @@ namespace Practico
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
 
-        public static void createStage() //
+        public void createStage() //
         {
             int stage = bb.LoadMesh("Images//Stage//stage.3DS");
             bb.PositionEntity(stage, 0, 0.1f, 0);

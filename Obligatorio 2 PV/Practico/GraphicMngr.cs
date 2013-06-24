@@ -20,6 +20,16 @@ namespace Practico
         public int PLAY_BUTTON = 0;
         public int MESSAGE = 0;
 
+        private static GraphicMngr instancia = null;
+
+        private GraphicMngr() {}
+        public static GraphicMngr GetInstancia() {
+            if (instancia == null) {
+                instancia = new GraphicMngr();
+            }
+            return instancia;
+        }
+
         public void LoadImages()
         {
             STARTUP_BACKGROUND = bb.LoadImage("Images//Menu01.png");
@@ -57,6 +67,15 @@ namespace Practico
             int font = bb.LoadFont(Constants.FONT_NAME, Constants.FONT_HEIGHT, Constants.FONT_BOLD, Constants.FONT_ITALIC);
             bb.SetFont(font);
             bb.Color(Constants.FONT_COLOR_RED, Constants.FONT_COLOR_GREEN, Constants.FONT_COLOR_BLUE);
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
+        # region --- HUD -------------------------------------------------------------------------------------------------------------------------------
+        public void HUD()
+        {
+            bb.Text(10, 10, "Time: 00:00" + "");
+            bb.Text(10, 10, "Lives: 02" + "");
+            bb.Text(10, 10, "Stage: 01" + "");
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 

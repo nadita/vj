@@ -9,7 +9,7 @@ namespace Practico
         [STAThread]
         static void Main()
         {
-            GameMngr game = new GameMngr();
+            GameMngr game = GameMngr.GetInstancia();
             game.Play();
         }
     }
