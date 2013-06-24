@@ -149,7 +149,7 @@ namespace Practico
         {
             int selected = game.actual_stage;
 
-            for (int i = 0; i <= game.stageList.Count; i++)
+            for (int i = 0; i < game.stageList.Count; i++)
             {
                 if (bb.RectsOverlap(game.levels[i][0], game.levels[i][1], Constants.PLAY_BUTTON_WIDTH, Constants.PLAY_BUTTON_HEIGHT, bb.MouseX(), bb.MouseY(), 1, 1) == 1)
                 {
