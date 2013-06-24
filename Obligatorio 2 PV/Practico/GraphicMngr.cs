@@ -75,5 +75,45 @@ namespace Practico
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
+        # region --- RENDER BACKGROUND SELECT LEVEL - "WINDOW 2" --------------------------------------------------------------------------------------------
+        //Window 2
+        public void RenderBackgroundSelectLevel()
+        {
+            bb.DrawImage(LEVEL_OPTION_BACKGROUND, 0, 0);
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
+
+        # region --- RENDER MESSAGE -------------------------------------------------------------------------------------------------------------------------
+        //Window 3
+        public void RenderMessage(String message)
+        {
+            bb.DrawImage(MESSAGE, 0, 0);
+            bb.Text(Constants.WIDTH / 2, Constants.HEIGHT / 2, message, bb.BBTRUE, bb.BBTRUE);
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+        # region --- RENDER LEVEL OPTIONS -------------------------------------------------------------------------------------------------------------------
+        public void RenderLevelOptions(int max_level, int[][]levels, int levels_count, int actual_level)
+        {
+            int i = 0;
+            for (; i <= max_level; i++)
+            {
+                bb.DrawImage(LEVELS, levels[i][0], levels[i][1], SELECT_LEVEL_FRAMES[i]);
+            }
+
+            for (; i < levels_count; i++)
+            {
+                bb.DrawImage(BLOCK_LEVEL, levels[i][0], levels[i][1]);
+            }
+
+            bb.DrawImage(LEVELS, levels[actual_level][0], levels[actual_level][1], SELECTED_LEVELS_FRAMES[actual_level]);
+
+            bb.DrawImage(PLAY_BUTTON, Constants.WIDTH / 2 - Constants.PLAY_BUTTON_WIDTH / 2, Constants.HEIGHT - Constants.PLAY_BUTTON_HEIGHT * 3 + Constants.PLAY_BUTTON_HEIGHT / 2);
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
     }
 }

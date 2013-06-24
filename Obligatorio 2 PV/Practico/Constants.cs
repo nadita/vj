@@ -20,5 +20,11 @@ namespace Practico
         public const int FONT_COLOR_RED = 255;
         public const int FONT_COLOR_GREEN = 255;
         public const int FONT_COLOR_BLUE = 255;
+
+        public const int PLAY_BUTTON_WIDTH = 128;
+        public const int PLAY_BUTTON_HEIGHT = 64;
+
+        public const int LEVEL_BLOCK_WIDTH = 99;
+        public const int BLOCK_WIDTH = 64;
     }
 }
