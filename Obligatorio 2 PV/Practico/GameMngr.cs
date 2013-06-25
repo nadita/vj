@@ -9,31 +9,16 @@ namespace Practico
 {
     public class GameMngr
     {
+        //--ATRIBUTES---------------------------------------------------------------------
+       
         private Game game = Game.GetInstance();
         private GraphicMngr graphicMngr = GraphicMngr.GetInstance();
         private SoundMngr soundMngr = SoundMngr.GetInstance();
         private XmlMngr xmlMngr = XmlMngr.GetInstance();
         private static GameMngr instancia = null;
 
-        //--GAME CONSTS-------------------------------------------------------------------
-        //--------------------------------------------------------------------------------
-        static int CAMERA_BOMBER = 0;
-        static int CAMERA_ALL = 0;
-        static int CAMERA = 0;
-
-        //--------------------------------------------------------------------------------
-
-        static int BOMBER = 0;
-        static int BOMBER_WALK = 0;
-        static float BOMBER_X = 0f;
-        static float BOMBER_Y = 0f;
-
-        static int BLOCK = 0;
-
         //--METHODS-----------------------------------------------------------------------
-        //--------------------------------------------------------------------------------
         
-
         private GameMngr() {}
         public static GameMngr GetInstancia()
         {
@@ -176,17 +161,17 @@ namespace Practico
 
         # region --- PLAY STAGE -----------------------------------------------------------------------------------------------------------------
         private void PlayStage() {
-            createStage();
-            loadStage();
-            createBomberman();
-            createLights();
-            createCamera();
+            graphicMngr.createStage();
+            graphicMngr.loadStage(game.getSelectedStage());
+            graphicMngr.createBomberman();
+            graphicMngr.createLights();
+            graphicMngr.createCamera();
             
             while (bb.KeyDown(bb.KEY_ESCAPE) == 0)
             {
                 bb.UpdateWorld();
 
-                walkBomberman();
+                graphicMngr.walkBomberman();
 
                 bb.RenderWorld();
 
@@ -307,98 +292,6 @@ namespace Practico
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
-
-        public void createStage() //
-        {
-            int stage = bb.LoadMesh("Images//Stage//stage.3DS");
-            bb.PositionEntity(stage, 0, 0.1f, 0);
-        }
-
-        public void loadStage() {
-            Stage stage = game.stageList.ElementAt(game.actual_stage);
-
-            for (int i = 0; i < stage.matrix.Length; i++) {
-                for (int j = 0; j < stage.matrix[i].Length; j++) {
-                    if (stage.matrix[i][j] != null && stage.matrix[i][j].type == "Brick") {
-                        createBlock(i, (j * Constants.BLOCK_FACTOR));
-                    }
-                }
-            }
-        }
-
-        //--------------------------------------------------------------------------------
-
-        static void createLights()
-        {
-            bb.AmbientLight(255, 255, 255);
-        }
-
-        //--------------------------------------------------------------------------------
-
-        static void createCamera()
-        {
-            CAMERA = bb.CreateCamera();
-            bb.CameraClsColor(CAMERA, 189, 224, 251);
-            bb.CameraRange(CAMERA, 0.1f, 200);
-            bb.RotateEntity(CAMERA, 60, 0, 0);
-            bb.PositionEntity(CAMERA, 16, 25, -30);
-        }
-
-        //--------------------------------------------------------------------------------
-
-        public static void createBomberman() //
-        {
-            BOMBER = bb.LoadAnimMesh("Images//Bomberman//bomber.b3d");
-            bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Y);
-            bb.RotateEntity(BOMBER, 0, 270, 0);
-            bb.ScaleEntity(BOMBER, 0.7f, 1, 0.7f);
-            BOMBER_WALK = bb.ExtractAnimSeq(BOMBER, 30, 60);
-        }
-
-        public static void createBlock(float x, float y) {
-            BLOCK = bb.LoadAnimMesh("Images//Stage//block.3DS");
-            bb.PositionEntity(BLOCK, x, 0, y);
-            //bb.RotateEntity(BLOCK, 0, 270, 0);
-            bb.ScaleEntity(BLOCK, 0.7f, 1, 0.7f);
-        }
-
-        public static void walkBomberman()
-        {
-            //Si la camara no esta en bomberman
-            if (bb.KeyDown(bb.KEY_UP) == 1)
-            {
-                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
-                bb.Animating(BOMBER);
-                bb.RotateEntity(BOMBER, 0, 90, 0);
-                BOMBER_Y += 0.1f;
-            }
-
-            if (bb.KeyDown(bb.KEY_DOWN) == 1)
-            {
-                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
-                bb.Animating(BOMBER);
-                bb.RotateEntity(BOMBER, 0, 270, 0);
-                BOMBER_Y += -0.1f;
-            }
-
-            if (bb.KeyDown(bb.KEY_LEFT) == 1)
-            {
-                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
-                bb.Animating(BOMBER);
-                bb.RotateEntity(BOMBER, 0, 180, 0);
-                BOMBER_X += -0.1f;
-            }
-
-            if (bb.KeyDown(bb.KEY_RIGHT) == 1)
-            {
-                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
-                bb.Animating(BOMBER);
-                bb.RotateEntity(BOMBER, 0, 0, 0);
-                BOMBER_X += 0.1f;
-            }
-            bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Y);
-        }
-        
         # region --- PRESS PLAY -----------------------------------------------------------------------------------------------------------------
         private Boolean PressPlay()
         {

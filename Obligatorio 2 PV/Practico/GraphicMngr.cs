@@ -12,13 +12,25 @@ namespace Practico
         public int STARTUP_BACKGROUND = 0;
         public int LEVEL_OPTION_BACKGROUND = 0;
         public int LEVEL_OPTION = 0;
-        public int STAGE_BACKGROUND = 0;
+        //public int STAGE_BACKGROUND = 0;
         public int LEVELS = 0;
         public int[] SELECT_LEVEL_FRAMES = new int[9];
         public int[] SELECTED_LEVELS_FRAMES = new int[8];
         public int BLOCK_LEVEL = 0;
         public int PLAY_BUTTON = 0;
         public int MESSAGE = 0;
+
+        //--BOMBERMAN IMAGES -----------------------------------------------------------------
+        int BOMBER = 0;
+        int BOMBER_WALK = 0;
+        int BLOCK = 0;
+
+        float BOMBER_X = 0f;
+        float BOMBER_Y = 0f;
+        //--CAMERAS --------------------------------------------------------------------------
+        int CAMERA_BOMBER = 0;
+        int CAMERA_ALL = 0;
+        int CAMERA = 0;
 
         private static GraphicMngr instance = null;
 
@@ -70,7 +82,7 @@ namespace Practico
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
-        # region --- HUD -------------------------------------------------------------------------------------------------------------------------------
+        # region --- HUD ------------------------------------------------------------------------------------------------------------------------------------
         public void HUD()
         {
             bb.Text(10, 10, "Time: 00:00" + "");
@@ -78,7 +90,6 @@ namespace Practico
             bb.Text(10, 10, "Stage: 01" + "");
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
-
 
         # region --- RENDER BACKGROUND START UP - "WINDOW 1" ------------------------------------------------------------------------------------------------
         //Window 1
@@ -102,7 +113,6 @@ namespace Practico
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
-
         # region --- RENDER MESSAGE -------------------------------------------------------------------------------------------------------------------------
         //Window 3
         public void RenderMessage(String message)
@@ -111,8 +121,6 @@ namespace Practico
             bb.Text(Constants.WIDTH / 2, Constants.HEIGHT / 2, message, bb.BBTRUE, bb.BBTRUE);
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
-
-
 
         # region --- RENDER LEVEL OPTIONS -------------------------------------------------------------------------------------------------------------------
         public void RenderLevelOptions(int max_level, int[][]levels, int levels_count, int actual_level)
@@ -134,5 +142,98 @@ namespace Practico
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
+
+        public void createStage() //
+        {
+            int stage = bb.LoadMesh("Images//Stage//stage.3DS");
+            bb.PositionEntity(stage, 0, 0.1f, 0);
+        }
+
+        public void loadStage(Stage stage)
+        {
+            for (int i = 0; i < stage.matrix.Length; i++)
+            {
+                for (int j = 0; j < stage.matrix[i].Length; j++)
+                {
+                    if (stage.matrix[i][j] != null && stage.matrix[i][j].type == "Brick")
+                    {
+                        createBlock(i, (j * Constants.BLOCK_FACTOR));
+                    }
+                }
+            }
+        }
+
+        //--------------------------------------------------------------------------------
+
+        public void createLights()
+        {
+            bb.AmbientLight(255, 255, 255);
+        }
+
+        //--------------------------------------------------------------------------------
+
+        public void createCamera()
+        {
+            CAMERA = bb.CreateCamera();
+            bb.CameraClsColor(CAMERA, 189, 224, 251);
+            bb.CameraRange(CAMERA, 0.1f, 200);
+            bb.RotateEntity(CAMERA, 60, 0, 0);
+            bb.PositionEntity(CAMERA, 16, 25, -30);
+        }
+
+        //--------------------------------------------------------------------------------
+
+        public void createBomberman() //
+        {
+            BOMBER = bb.LoadAnimMesh("Images//Bomberman//bomber.b3d");
+            bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Y);
+            bb.RotateEntity(BOMBER, 0, 270, 0);
+            bb.ScaleEntity(BOMBER, 0.7f, 1, 0.7f);
+            BOMBER_WALK = bb.ExtractAnimSeq(BOMBER, 30, 60);
+        }
+
+        public void createBlock(float x, float y)
+        {
+            BLOCK = bb.LoadAnimMesh("Images//Stage//block.3DS");
+            bb.PositionEntity(BLOCK, x, 0, y);
+            bb.ScaleEntity(BLOCK, 0.7f, 1, 0.7f);
+        }
+
+        public void walkBomberman()
+        {
+            //Si la camara no esta en bomberman
+            if (bb.KeyDown(bb.KEY_UP) == 1)
+            {
+                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
+                bb.Animating(BOMBER);
+                bb.RotateEntity(BOMBER, 0, 90, 0);
+                BOMBER_Y += 0.1f;
+            }
+
+            if (bb.KeyDown(bb.KEY_DOWN) == 1)
+            {
+                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
+                bb.Animating(BOMBER);
+                bb.RotateEntity(BOMBER, 0, 270, 0);
+                BOMBER_Y += -0.1f;
+            }
+
+            if (bb.KeyDown(bb.KEY_LEFT) == 1)
+            {
+                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
+                bb.Animating(BOMBER);
+                bb.RotateEntity(BOMBER, 0, 180, 0);
+                BOMBER_X += -0.1f;
+            }
+
+            if (bb.KeyDown(bb.KEY_RIGHT) == 1)
+            {
+                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
+                bb.Animating(BOMBER);
+                bb.RotateEntity(BOMBER, 0, 0, 0);
+                BOMBER_X += 0.1f;
+            }
+            bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Y);
+        }
     }
 }

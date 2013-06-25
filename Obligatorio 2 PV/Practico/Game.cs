@@ -45,6 +45,10 @@ namespace Practico
             this.actual_score = 0;
         }
 
+        public Stage getSelectedStage() {
+            return this.stageList.ElementAt(this.actual_stage);
+        }
+
         //Editor
 
         public void addNivel(Stage s) {
