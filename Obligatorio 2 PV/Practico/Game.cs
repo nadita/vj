@@ -18,14 +18,14 @@ namespace Practico
         public int[][] levels {get; set;}
         public int max_stage { get; set; }
 
-        private static Game instancia = null;
+        private static Game instance = null;
 
-        public static Game GetInstancia()
+        public static Game GetInstance()
         {
-            if (instancia == null) {
-                instancia = new Game();
+            if (instance == null) {
+                instance = new Game();
             }
-            return instancia;
+            return instance;
         }
 
         private Game() {

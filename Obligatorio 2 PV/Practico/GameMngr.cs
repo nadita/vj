@@ -9,10 +9,10 @@ namespace Practico
 {
     public class GameMngr
     {
-        private Game game = Game.GetInstancia();
-        private GraphicMngr graphicMngr = GraphicMngr.GetInstancia();
-        private SoundMngr soundMngr = SoundMngr.GetInstancia();
-        private XmlMngr xmlMngr = XmlMngr.GetInstancia();
+        private Game game = Game.GetInstance();
+        private GraphicMngr graphicMngr = GraphicMngr.GetInstance();
+        private SoundMngr soundMngr = SoundMngr.GetInstance();
+        private XmlMngr xmlMngr = XmlMngr.GetInstance();
         private static GameMngr instancia = null;
 
         //--GAME CONSTS-------------------------------------------------------------------

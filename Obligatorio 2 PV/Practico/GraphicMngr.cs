@@ -20,14 +20,14 @@ namespace Practico
         public int PLAY_BUTTON = 0;
         public int MESSAGE = 0;
 
-        private static GraphicMngr instancia = null;
+        private static GraphicMngr instance = null;
 
         private GraphicMngr() {}
-        public static GraphicMngr GetInstancia() {
-            if (instancia == null) {
-                instancia = new GraphicMngr();
+        public static GraphicMngr GetInstance() {
+            if (instance == null) {
+                instance = new GraphicMngr();
             }
-            return instancia;
+            return instance;
         }
 
         public void LoadImages()

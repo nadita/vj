@@ -9,21 +9,24 @@ namespace Practico
 {
     public class XmlMngr
     {
+        # region --- ATTRIBUTES -------------------------------------------------------------------------------------------------------------
         private static string bombermanGConfigXml = @"bombermanGConfiguration.xml";
-        private static string saveConfigXml = "";
-
         public Level[] levels = new Level[6];
-        private static XmlMngr instancia = null;
+        private Editor editor = Editor.GetInstancia();
+        private static XmlMngr instance = null;
+        # endregion -----------------------------------------------------------------------------------------------------------------------------
 
+        # region --- GET INSTANCE -----------------------------------------------------------------------------------------------------------
         private XmlMngr() { }
-        public static XmlMngr GetInstancia()
+        public static XmlMngr GetInstance()
         {
-            if (instancia == null) {
-                instancia = new XmlMngr();
+            if (instance == null)
+            {
+                instance = new XmlMngr();
             }
-            return instancia;
+            return instance;
         }
-
+        # endregion -----------------------------------------------------------------------------------------------------------------------------
 
         # region --- READ XML CONFIGURATION -----------------------------------------------------------------------------------------------------
         public void ReadXmlConf()
@@ -38,10 +41,7 @@ namespace Practico
                 }
                 GetListBombermanGConfiguration(doc);
             }
-            catch (Exception e)
-            {
-
-            }
+            catch (Exception e) { }
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ namespace Practico
             XmlNodeList nodesConfig = xmlData.Item(0).ChildNodes;
             int levelNumber = 0;
 
-            if (nodesConfig!=null)
+            if (nodesConfig != null)
             {
                 foreach (XmlNode n in nodesConfig)
                 {
@@ -81,7 +81,8 @@ namespace Practico
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
         # region --- LOAD LEVEL -----------------------------------------------------------------------------------------------------------------
-        private Level LoadLevel(XmlNode levelNode) {
+        private Level LoadLevel(XmlNode levelNode)
+        {
             Level level = new Level();
 
             if (levelNode != null)
@@ -89,7 +90,7 @@ namespace Practico
                 XmlNodeList levelData = levelNode.ChildNodes;
                 XmlElement bombermanPosition = (XmlElement)levelData.Item(0);
                 level.bombermanPosY = int.Parse(bombermanPosition.GetAttribute("posY"));
-                level.bombermanPosX = int.Parse(bombermanPosition.GetAttribute("posX"));                
+                level.bombermanPosX = int.Parse(bombermanPosition.GetAttribute("posX"));
 
                 level.blocks = LoadBlocks(levelData.Item(1));
                 level.powerUps = LoadPowerUps(levelData.Item(2));
@@ -101,7 +102,8 @@ namespace Practico
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
         # region --- LOAD BLOCKS ----------------------------------------------------------------------------------------------------------------
-        private List<string[]> LoadBlocks(XmlNode blocksData) {
+        private List<string[]> LoadBlocks(XmlNode blocksData)
+        {
             List<string[]> loadedBlocks = new List<string[]>();
 
             if (blocksData != null)
@@ -186,40 +188,130 @@ namespace Practico
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
         # region --- SAVE XML CONFIGURATION -----------------------------------------------------------------------------------------------------
-        public static void SaveXmlConf(string fileName, string file) 
+        public void SaveXmlConf()
         {
-            System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-            byte[] data = encoding.GetBytes(file);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(bombermanGConfigXml);
 
-            if (!Directory.Exists(@"C:\BombermanG\"))
-                Directory.CreateDirectory(@"C:\BombermanG\");
+            XmlNodeList aNodes = doc.SelectNodes("/bombermanGConfiguration/scenery");
 
-            using (FileStream fileStream = new FileStream(@"C:\BombermanG\" + fileName, FileMode.Append, FileAccess.Write))
+            foreach (XmlNode levelNode in aNodes)
             {
-                fileStream.Write(data, 0, data.Length);
+                XmlAttribute idAttribute = levelNode.Attributes["level"];
+                if (idAttribute != null)
+                {
+                    Game game = Game.GetInstance();
+                    if (idAttribute.Value.CompareTo(game.actual_stage + "") == 0)
+                    { //actual nivel
+                        XmlNodeList levelData = levelNode.ChildNodes;
+
+                        UpdateBlocks(doc, levelData);
+                        UpdatePowerUps(doc, levelData);
+                        UpdateEnemies(doc, levelData);
+                    }
+                }
             }
 
+            doc.Save(bombermanGConfigXml);
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
-        /*public class bombermanGConfiguration
+        # region --- UPDATE BLOCKS ----------------------------------------------------------------------------------------------------------
+        private void UpdateBlocks(XmlDocument doc, XmlNodeList levelData)
         {
-            public String title;
+            //Delete blocks
+            foreach (string[] deletedBlock in editor.deletedBlocks)
+            {
+                foreach (XmlNode block in levelData.Item(0))
+                {
+                    if (block.Name.CompareTo("tile") == 0)
+                    {
+                        XmlAttribute attributePosX = block.Attributes["posX"];
+                        XmlAttribute attributePosZ = block.Attributes["posZ"];
+                        if (attributePosX.Value.CompareTo(deletedBlock[0]) == 0 && attributePosZ.Value.CompareTo(deletedBlock[1]) == 0)
+                        {
+                            levelData.Item(0).RemoveChild(block);
+                        }
+                    }
+                }
+            }
+
+            //Add blocks
+            foreach (string[] newBlock in editor.newBlocks)
+            {
+                XmlNode nuevo = doc.CreateNode(XmlNodeType.Element, "tile", "");
+                ((XmlElement)nuevo).SetAttribute("posX", newBlock[0]);
+                ((XmlElement)nuevo).SetAttribute("posZ", newBlock[1]);
+                levelData.Item(0).AppendChild(nuevo);
+            }
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------
 
-
-        public void WriteXML()
+        # region --- UPDATE POWER UPS -------------------------------------------------------------------------------------------------------
+        private void UpdatePowerUps(XmlDocument doc, XmlNodeList levelData)
         {
+            //Delete powerUp
+            foreach (string[] deletedPowerUp in editor.deletedPowerUps)
+            {
+                foreach (XmlNode powerUp in levelData.Item(1))
+                {
+                    if (powerUp.Name.CompareTo("tile") == 0)
+                    {
+                        XmlAttribute attributeType = powerUp.Attributes["type"];
+                        XmlAttribute attributePosX = powerUp.Attributes["posX"];
+                        XmlAttribute attributePosZ = powerUp.Attributes["posZ"];
+                        if (attributeType.Value.CompareTo(deletedPowerUp[0]) == 0 && attributePosX.Value.CompareTo(deletedPowerUp[1]) == 0 && attributePosZ.Value.CompareTo(deletedPowerUp[2]) == 0)
+                        {
+                            levelData.Item(1).RemoveChild(powerUp);
+                        }
+                    }
+                }
+            }
 
-            bombermanGConfiguration overview = new bombermanGConfiguration();
-            overview.title = "";
-            System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(bombermanGConfiguration));
+            //Add powerUp
+            foreach (string[] newPowerUp in editor.newPowerUps)
+            {
+                XmlNode nuevo = doc.CreateNode(XmlNodeType.Element, "tile", "");
+                ((XmlElement)nuevo).SetAttribute("type", newPowerUp[0]);
+                ((XmlElement)nuevo).SetAttribute("posX", newPowerUp[1]);
+                ((XmlElement)nuevo).SetAttribute("posZ", newPowerUp[2]);
+                levelData.Item(1).AppendChild(nuevo);
+            }
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------
 
-            System.IO.StreamWriter file = new System.IO.StreamWriter(
-                @"bombermanGConfiguration.xml");
-            writer.Serialize(file, overview);
-            file.Close();
-        }*/
+        # region --- UPDATE ENEMIES ---------------------------------------------------------------------------------------------------------
+        private void UpdateEnemies(XmlDocument doc, XmlNodeList levelData)
+        {
+            //Delete enemies
+            foreach (string[] deletedEnemy in editor.deletedEnemies)
+            {
+                foreach (XmlNode enemy in levelData.Item(3))
+                {
+                    if (enemy.Name.CompareTo("tile") == 0)
+                    {
+                        XmlAttribute attributeType = enemy.Attributes["type"];
+                        XmlAttribute attributePosX = enemy.Attributes["posX"];
+                        XmlAttribute attributePosZ = enemy.Attributes["posZ"];
+                        if (attributeType.Value.CompareTo(deletedEnemy[0]) == 0 && attributePosX.Value.CompareTo(deletedEnemy[1]) == 0 && attributePosZ.Value.CompareTo(deletedEnemy[2]) == 0)
+                        {
+                            levelData.Item(3).RemoveChild(enemy);
+                        }
+                    }
+                }
+            }
+
+            //Add enemies
+            foreach (string[] newEnemy in editor.newEnemies)
+            {
+                XmlNode nuevo = doc.CreateNode(XmlNodeType.Element, "tile", "");
+                ((XmlElement)nuevo).SetAttribute("type", newEnemy[0]);
+                ((XmlElement)nuevo).SetAttribute("posX", newEnemy[1]);
+                ((XmlElement)nuevo).SetAttribute("posZ", newEnemy[2]);
+                levelData.Item(3).AppendChild(nuevo);
+            }
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------
+
     }
 }
