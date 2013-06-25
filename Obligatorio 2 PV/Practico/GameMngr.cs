@@ -15,18 +15,22 @@ namespace Practico
         private GraphicMngr graphicMngr = GraphicMngr.GetInstance();
         private SoundMngr soundMngr = SoundMngr.GetInstance();
         private XmlMngr xmlMngr = XmlMngr.GetInstance();
-        private static GameMngr instancia = null;
+        private static GameMngr instance = null;
 
         //--METHODS-----------------------------------------------------------------------
-        
-        private GameMngr() {}
-        public static GameMngr GetInstancia()
+
+        # region --- GET INSTANCE -----------------------------------------------------------------------------------------------------------
+        private GameMngr() { }
+        public static GameMngr GetInstance()
         {
-            if (instancia == null) {
-                instancia = new GameMngr();
+            if (instance == null)
+            {
+                instance = new GameMngr();
             }
-            return instancia;
+            return instance;
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------
+
 
 
         # region --- PLAY -----------------------------------------------------------------------------------------------------------------------
@@ -37,21 +41,9 @@ namespace Practico
 
             bb.SetBlitz3DTitle("BombermanG 3d", "Exit?");
 
+            InitializeWorld();
             graphicMngr.LoadImages();
             graphicMngr.SetFont();
-            soundMngr.InitializeSounds();
-
-            bb.SetBuffer(bb.BackBuffer());
-
-            StartGame();
-            SelectStage();
-
-            
-
-            /*graphicMngr.LoadImages();
-            graphicMngr.SetFont();
-            InitializeWorld();
-            soundMngr.InitializeSounds();
 
             bb.SetBuffer(bb.BackBuffer());
 
@@ -60,7 +52,7 @@ namespace Practico
 
             FreeWorld();
 
-            bb.EndBlitz3D();*/
+            bb.EndBlitz3D();
         }
 
         # endregion -----------------------------------------------------------------------------------------------------------------------------
@@ -314,5 +306,21 @@ namespace Practico
 
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
+
+        public void InitializeWorld() //
+        {
+
+            soundMngr.InitializeSounds();
+        }
+
+        public void FreeWorld()
+        {
+
+        }
+
+        public void FreeStage()
+        {
+            soundMngr.FreeSounds();
+        }
     }
 }

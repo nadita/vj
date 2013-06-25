@@ -88,14 +88,9 @@ namespace Practico
             if (levelNode != null)
             {
                 XmlNodeList levelData = levelNode.ChildNodes;
-                XmlElement bombermanPosition = (XmlElement)levelData.Item(0);
-                level.bombermanPosY = int.Parse(bombermanPosition.GetAttribute("posY"));
-                level.bombermanPosX = int.Parse(bombermanPosition.GetAttribute("posX"));
-
-                level.blocks = LoadBlocks(levelData.Item(1));
-                level.powerUps = LoadPowerUps(levelData.Item(2));
-                level.doors = LoadDoors(levelData.Item(3));
-                level.enemies = LoadEnemies(levelData.Item(4));
+                level.blocks = LoadBlocks(levelData.Item(0));
+                level.powerUps = LoadPowerUps(levelData.Item(1));
+                level.enemies = LoadEnemies(levelData.Item(2));
             }
             return level;
         }
@@ -114,7 +109,7 @@ namespace Practico
                 {
                     string[] newBlock = new string[2];
                     newBlock[0] = ((XmlElement)n).GetAttribute("posX");
-                    newBlock[1] = ((XmlElement)n).GetAttribute("posY");
+                    newBlock[1] = ((XmlElement)n).GetAttribute("posZ");
                     loadedBlocks.Add(newBlock);
                 }
             }
@@ -136,32 +131,11 @@ namespace Practico
                     string[] newPowerUp = new string[3];
                     newPowerUp[0] = ((XmlElement)n).GetAttribute("type");
                     newPowerUp[1] = ((XmlElement)n).GetAttribute("posX");
-                    newPowerUp[2] = ((XmlElement)n).GetAttribute("posY");
+                    newPowerUp[2] = ((XmlElement)n).GetAttribute("posZ");
                     loadedPowerUps.Add(newPowerUp);
                 }
             }
             return loadedPowerUps;
-        }
-        # endregion -----------------------------------------------------------------------------------------------------------------------------
-
-        # region --- LOAD DOORS -----------------------------------------------------------------------------------------------------------------
-        private List<string[]> LoadDoors(XmlNode doorsData)
-        {
-            List<string[]> loadedDoors = new List<string[]>();
-
-            if (doorsData != null)
-            {
-                XmlNodeList doorsList = doorsData.ChildNodes;
-
-                foreach (XmlNode n in doorsList)
-                {
-                    string[] newBlock = new string[2];
-                    newBlock[0] = ((XmlElement)n).GetAttribute("posX");
-                    newBlock[1] = ((XmlElement)n).GetAttribute("posY");
-                    loadedDoors.Add(newBlock);
-                }
-            }
-            return loadedDoors;
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
@@ -179,7 +153,7 @@ namespace Practico
                     string[] newEnemy = new string[3];
                     newEnemy[0] = ((XmlElement)n).GetAttribute("type");
                     newEnemy[1] = ((XmlElement)n).GetAttribute("posX");
-                    newEnemy[2] = ((XmlElement)n).GetAttribute("posY");
+                    newEnemy[2] = ((XmlElement)n).GetAttribute("posZ");
                     loadedEnemies.Add(newEnemy);
                 }
             }
