@@ -31,8 +31,7 @@ namespace Practico
         private Game() {
             this.stageList = new List<Stage>();
 
-            
-            stageList.Add(new Stage());
+            addStageOne();
             stageList.Add(new Stage());
             stageList.Add(new Stage());
             stageList.Add(new Stage());
@@ -62,6 +61,19 @@ namespace Practico
 
         public void saveNivel(Stage s) { 
         
+        }
+
+        private void addStageOne() { 
+
+            Stage one = new Stage();
+            Cell c = new Cell("Brick", "None");
+            addItemToNivel(one, c, 0, 1);
+            addItemToNivel(one, c, 0, 2);
+            addItemToNivel(one, c, 0, 5); 
+            addItemToNivel(one, c, 2, 2);
+            addItemToNivel(one, c, 2, 4);
+            addNivel(one);
+            
         }
     }
 }

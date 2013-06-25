@@ -28,6 +28,8 @@ namespace Practico
         static float BOMBER_X = 0f;
         static float BOMBER_Y = 0f;
 
+        static int BLOCK = 0;
+
         //--METHODS-----------------------------------------------------------------------
         //--------------------------------------------------------------------------------
         
@@ -118,8 +120,7 @@ namespace Practico
                     }
                     bb.Flip();
                 }
-
-                PlayStage();
+                SelectAction();
                 bb.EndBlitz3D();
             }
         }
@@ -176,6 +177,7 @@ namespace Practico
         # region --- PLAY STAGE -----------------------------------------------------------------------------------------------------------------
         private void PlayStage() {
             createStage();
+            loadStage();
             createBomberman();
             createLights();
             createCamera();
@@ -223,7 +225,39 @@ namespace Practico
         }*/
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
+        # region --- PLAY STAGE -----------------------------------------------------------------------------------------------------------------
+        public void EditStage(){
+        
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------
 
+        # region --- SELECT ACTION --------------------------------------------------------------------------------------------------------------
+        private void SelectAction() {
+
+            Boolean playPressed = false;
+            while (!playPressed)
+            {
+                bb.Cls();
+                graphicMngr.RenderMessage("Press E to Edit or P to Play!");
+                bb.Flip();
+                bb.FlushKeys();
+                bb.WaitKey();
+                if (bb.KeyHit(bb.KEY_E) >= 1)
+                {
+                    playPressed = true;
+                    EditStage();
+                }
+                else {
+                    if (bb.KeyHit(bb.KEY_P) >= 1) {
+                        playPressed = true;
+                        PlayStage();
+                    }
+                }
+            }
+           
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------
+      
         # region --- MESSAGE --------------------------------------------------------------------------------------------------------------------
         private void Message()
         {
@@ -280,6 +314,18 @@ namespace Practico
             bb.PositionEntity(stage, 0, 0.1f, 0);
         }
 
+        public void loadStage() {
+            Stage stage = game.stageList.ElementAt(game.actual_stage);
+
+            for (int i = 0; i < stage.matrix.Length; i++) {
+                for (int j = 0; j < stage.matrix[i].Length; j++) {
+                    if (stage.matrix[i][j] != null && stage.matrix[i][j].type == "Brick") {
+                        createBlock(i, (j * Constants.BLOCK_FACTOR));
+                    }
+                }
+            }
+        }
+
         //--------------------------------------------------------------------------------
 
         static void createLights()
@@ -303,10 +349,17 @@ namespace Practico
         public static void createBomberman() //
         {
             BOMBER = bb.LoadAnimMesh("Images//Bomberman//bomber.b3d");
-            bb.PositionEntity(BOMBER, BOMBER_X, BOMBER_Y, 0);
+            bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Y);
             bb.RotateEntity(BOMBER, 0, 270, 0);
             bb.ScaleEntity(BOMBER, 0.7f, 1, 0.7f);
             BOMBER_WALK = bb.ExtractAnimSeq(BOMBER, 30, 60);
+        }
+
+        public static void createBlock(float x, float y) {
+            BLOCK = bb.LoadAnimMesh("Images//Stage//block.3DS");
+            bb.PositionEntity(BLOCK, x, 0, y);
+            //bb.RotateEntity(BLOCK, 0, 270, 0);
+            bb.ScaleEntity(BLOCK, 0.7f, 1, 0.7f);
         }
 
         public static void walkBomberman()
