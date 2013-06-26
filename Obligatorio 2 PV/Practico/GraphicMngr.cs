@@ -19,7 +19,6 @@ namespace Practico
         public int BLOCK_LEVEL = 0;
         public int PLAY_BUTTON = 0;
         public int MESSAGE = 0;
-        private float SCALE = 2.04f;
 
         //--BOMBERMAN IMAGES -----------------------------------------------------------------
         int BOMBER = 0;
@@ -27,7 +26,33 @@ namespace Practico
         int BLOCK = 0;
 
         float BOMBER_X = 0f;
-        float BOMBER_Y = 0f;
+        float BOMBER_Z = 0f;
+
+        //--ENEMY IMAGES-------------------------------------------------------------------
+        public int ORION = 0;
+        public int ORION_MOVING = 0;
+        public int ORION_DEATH = 0;
+        public int SIRIUS = 0;
+        public int SIRIUS_DEATH = 0;
+        public int SIRIUS_MOVING = 0;
+        public int LEPUS = 0;
+        public int LEPUS_DEATH = 0;
+
+        //COLLISION TYPES
+        private int BOMBER_TYPE = 1;
+        private int ENEMIES_TYPE = 2;
+        private int STAGE_TYPE = 3;
+
+        //POWERUP IMAGES
+        public int MAX_SPEED = 0;
+        public int EXTRA_POWER = 0;
+
+        //--BOMB IMAGES--------------------------------------------------------------------
+        public int BOMB = 0;
+
+        //--EXPLOSION IMAGES---------------------------------------------------------------
+        public int EXPLOSION = 0;
+
         //--CAMERAS --------------------------------------------------------------------------
         int CAMERA_BOMBER = 0;
         int CAMERA_ALL = 0;
@@ -54,8 +79,10 @@ namespace Practico
             CreateStage();
             LoadStage(Game.GetInstance().actualStage);
             CreateBomberman();
+            CreateEnemies();
             CreateLights();
             CreateCamera();
+            CreateCollisions();
         }
 
         public void LoadImages()
@@ -85,7 +112,6 @@ namespace Practico
 
             PLAY_BUTTON = bb.LoadImage("Images//Play_button.png");
             bb.MaskImage(PLAY_BUTTON, 200, 0, 200);
-            
            
         }
       
@@ -101,9 +127,9 @@ namespace Practico
         # region --- HUD ------------------------------------------------------------------------------------------------------------------------------------
         public void HUD()
         {
-            bb.Text(10, 10, "Time: 00:00" + "");
-            bb.Text(10, 10, "Lives: 02" + "");
-            bb.Text(10, 10, "Stage: 01" + "");
+            bb.Text(20, 20, "Time: 00:00" + "");
+            bb.Text(20, 40, "Lives: " + Game.GetInstance().actual_lives);
+            bb.Text(20, 60, "Stage: " + (Game.GetInstance().actual_stage+1));
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -173,7 +199,7 @@ namespace Practico
                 {
                     if (stage.matrix[i][j] != null && stage.matrix[i][j].type == Cell.BLOCK)
                     {
-                        CreateBlock(i, (j * Constants.BLOCK_FACTOR));
+                        CreateBlock((i * Constants.BLOCK_FACTOR), (j * Constants.BLOCK_FACTOR * (-1f)));
                     }
                 }
             }
@@ -202,17 +228,51 @@ namespace Practico
         public void CreateBomberman() //
         {
             BOMBER = bb.LoadAnimMesh("Images//Bomberman//bomber.b3d");
-            bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Y);
+            bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Z);
             bb.RotateEntity(BOMBER, 0, 270, 0);
-            bb.ScaleEntity(BOMBER, 0.7f, 1, 0.7f);
             BOMBER_WALK = bb.ExtractAnimSeq(BOMBER, 30, 60);
         }
 
         public void CreateBlock(float x, float z)
         {
             BLOCK = bb.LoadAnimMesh("Images//Stage//block.3DS");
-            bb.PositionEntity(BLOCK, x*SCALE, 0, z);
+            bb.PositionEntity(BLOCK, x, 0, z);
             bb.ScaleEntity(BLOCK, 1, 1, 1);
+        }
+
+        public void CreateEnemies()
+        {
+            foreach (Enemy enemy in Game.GetInstance().actualStage.enemies)
+            {
+                if(enemy.type.CompareTo(Enemy.ORION)==0) {
+                    CreateOrion(enemy.position_X, enemy.position_Z);
+                }
+                else if (enemy.type.CompareTo(Enemy.SIRIUS) == 0)
+                {
+                    CreateSirius(enemy.position_X, enemy.position_Z);
+                }
+            }
+        }
+
+        public void CreateOrion(int x, int z) 
+        {
+            ORION = bb.LoadAnimMesh("Images//Orion//Orion.3ds");
+            bb.PositionEntity(ORION, (x * Constants.BLOCK_FACTOR), 0, (z * Constants.BLOCK_FACTOR * (-1f)));
+            /*bb.RotateEntity(ORION, 0, 270, 0);
+            ORION_MOVING = bb.ExtractAnimSeq(ORION, 30, 60);*/
+        }
+
+        public void CreateSirius(float x, float z)
+        {
+            SIRIUS = bb.LoadAnimMesh("Images//Sirius//Sirius.3ds");
+            bb.PositionEntity(SIRIUS, (x * Constants.BLOCK_FACTOR), 0, (z * Constants.BLOCK_FACTOR * (-1f)));
+            /*bb.RotateEntity(SIRIUS, 0, 270, 0);;*/
+            //SIRIUS_MOVING = bb.ExtractAnimSeq(ORION, 30, 60);
+        }
+
+        public void CreateCollisions()
+        {
+            
         }
 
         public void WalkBomberman()
@@ -223,7 +283,7 @@ namespace Practico
                 bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
                 bb.Animating(BOMBER);
                 bb.RotateEntity(BOMBER, 0, 90, 0);
-                BOMBER_Y += 0.1f;
+                BOMBER_Z += 0.1f;
             }
 
             if (bb.KeyDown(bb.KEY_DOWN) == 1)
@@ -231,7 +291,7 @@ namespace Practico
                 bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
                 bb.Animating(BOMBER);
                 bb.RotateEntity(BOMBER, 0, 270, 0);
-                BOMBER_Y += -0.1f;
+                BOMBER_Z += -0.1f;
             }
 
             if (bb.KeyDown(bb.KEY_LEFT) == 1)
@@ -249,7 +309,41 @@ namespace Practico
                 bb.RotateEntity(BOMBER, 0, 0, 0);
                 BOMBER_X += 0.1f;
             }
-            bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Y);
+            bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Z);
         }
+
+        public void UpdateOrion()
+        { }
+
+        public void UpdateSirius()
+        { }
+
+        # region --- FREE GRAPHICS --------------------------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Set the images free
+        /// </summary>
+        public void FreeGraphics()
+        {
+            //STAGE IMAGES
+            bb.FreeImage(STARTUP_BACKGROUND);
+            bb.FreeImage(LEVEL_OPTION_BACKGROUND);
+            bb.FreeImage(LEVEL_OPTION);
+            bb.FreeImage(PLAY_BUTTON);
+            /*bb.FreeImage(STAGE_BACKGROUND);
+            bb.FreeImage(BOMBERMAN);
+            bb.FreeImage(BOMBERMAN_DEATH);
+            bb.FreeImage(BLOCKS);
+            bb.FreeImage(ORION);
+            bb.FreeImage(ORION_DEATH);
+            bb.FreeImage(SIRIUS);
+            bb.FreeImage(SIRIUS_DEATH);
+            bb.FreeImage(LEPUS);
+            bb.FreeImage(LEPUS_DEATH);
+            bb.FreeImage(POWERUPS);
+            bb.FreeImage(DOOR);
+            bb.FreeImage(BOMB);
+            bb.FreeImage(EXPLOSION);*/
+        }
+        # endregion ----------------------------------------------------------------------------------------------------------------------------------------
     }
 }

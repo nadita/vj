@@ -27,6 +27,6 @@ namespace Practico
         public const int LEVEL_BLOCK_WIDTH = 99;
         public const int BLOCK_WIDTH = 64;
 
-        public const float BLOCK_FACTOR = -2.04f;
+        public const float BLOCK_FACTOR = 2.04f;
     }
 }

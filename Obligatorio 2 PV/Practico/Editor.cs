@@ -15,15 +15,16 @@ namespace Practico
         public List<string[]> deletedPowerUps = new List<string[]>();
         public List<string[]> deletedEnemies = new List<string[]>();
 
-        private static Editor instancia = null;
+        private static Editor instance = null;
 
         private Editor() { }
-        public static Editor GetInstancia()
+        public static Editor GetInstance()
         {
-            if (instancia == null) {
-                instancia = new Editor();
+            if (instance == null)
+            {
+                instance = new Editor();
             }
-            return instancia;
+            return instance;
         }
     }
 }

@@ -30,9 +30,7 @@ namespace Practico
             return instance;
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
-
-
-
+        
         # region --- PLAY -----------------------------------------------------------------------------------------------------------------------
         public void Play()
         {
@@ -87,8 +85,6 @@ namespace Practico
                         if (game.actual_stage != newSelectedLevel)
                         {
                             game.actual_stage = newSelectedLevel;
-                            //GlobalVariables.InicializeGlobalVariableValues(xmlMngr.levels[GlobalVariables.ACTUAL_LEVEL]);
-                            //RenderBackgroundSelectLevel();
                         }
                     }
                     bb.Flip();
@@ -149,16 +145,17 @@ namespace Practico
 
         # region --- PLAY STAGE -----------------------------------------------------------------------------------------------------------------
         private void PlayStage() {
-            Game.GetInstance().InitializeGameObjectValues();
-            graphicMngr.InitializeStage();
+
+            InitializeStage();
             
             while (bb.KeyDown(bb.KEY_ESCAPE) == 0)
             {
+                UpdateStage();
                 bb.UpdateWorld();
 
-                graphicMngr.WalkBomberman();
-
                 bb.RenderWorld();
+
+                PostRenderMethods();
 
                 bb.FlushKeys();
 
@@ -197,7 +194,23 @@ namespace Practico
 
         # region --- EDIT STAGE -----------------------------------------------------------------------------------------------------------------
         public void EditStage(){
-        
+            /*InitializeStage();
+
+            while (bb.KeyDown(bb.KEY_ESCAPE) == 0)
+            {
+                UpdateStage();
+                bb.UpdateWorld();
+
+                bb.RenderWorld();
+
+                PostRenderMethods();
+
+                bb.FlushKeys();
+
+                bb.Color(255, 0, 0);
+
+                bb.Flip();
+            }*/
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
@@ -212,13 +225,13 @@ namespace Practico
                 bb.Flip();
                 bb.FlushKeys();
                 bb.WaitKey();
-                if (bb.KeyHit(bb.KEY_E) >= 1)
+                if (bb.KeyHit(bb.KEY_E) == 1)
                 {
                     playPressed = true;
                     EditStage();
                 }
                 else {
-                    if (bb.KeyHit(bb.KEY_P) >= 1) {
+                    if (bb.KeyHit(bb.KEY_P) == 1) {
                         playPressed = true;
                         PlayStage();
                     }
@@ -303,14 +316,32 @@ namespace Practico
         public void InitializeWorld() //
         {
             xmlMngr.ReadXmlConf();
-            //game.InitializeGameValues();
             graphicMngr.InitializeGraphics();
             soundMngr.InitializeSounds();
         }
 
+        public void InitializeStage() //
+        {
+            Game.GetInstance().InitializeGameObjectValues();
+            graphicMngr.InitializeStage();
+        }
+
+        public void UpdateStage()
+        {
+            graphicMngr.WalkBomberman();
+            graphicMngr.UpdateOrion();
+            graphicMngr.UpdateSirius();
+        }
+
+        public void PostRenderMethods()
+        {
+            graphicMngr.HUD();
+        }
+
         public void FreeWorld()
         {
-
+            graphicMngr.FreeGraphics();
+            soundMngr.FreeSounds();
         }
 
         public void FreeStage()

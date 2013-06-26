@@ -12,7 +12,7 @@ namespace Practico
         # region --- ATTRIBUTES -------------------------------------------------------------------------------------------------------------
         private static string bombermanGConfigXml = @"bombermanGConfiguration.xml";
         public Level[] levels = new Level[6];
-        private Editor editor = Editor.GetInstancia();
+        private Editor editor = Editor.GetInstance();
         private static XmlMngr instance = null;
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 

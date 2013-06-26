@@ -45,9 +45,9 @@ namespace Practico
         public void InitializeGameObjectValues()
         {
             //Initializing
-            /*Character.BOMBERMAN_DEAD = false;
-            GlobalVariables.LEVEL_FINISHED = false;
-            GlobalVariables.END_TIME = false;*/
+            bomberman_is_dead = false;
+            level_finished = false;
+            end_time = false;
 
             actualStage = new Stage();
             Level actualLevel = XmlMngr.GetInstance().levels[actual_stage];
