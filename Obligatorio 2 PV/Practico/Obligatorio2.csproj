@@ -49,10 +49,10 @@
     <Compile Include="Cell.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Editor.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameMngr.cs" />
     <Compile Include="GraphicMngr.cs" />
-    <Compile Include="Images.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

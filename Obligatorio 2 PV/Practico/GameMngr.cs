@@ -38,18 +38,14 @@ namespace Practico
         {
             bb.BeginBlitz3D();
             bb.Graphics3D(Constants.WIDTH, Constants.HEIGHT, 32, bb.GFX_WINDOWED);
-
             bb.SetBlitz3DTitle("BombermanG 3d", "Exit?");
 
             InitializeWorld();
-            graphicMngr.LoadImages();
-            graphicMngr.SetFont();
 
             bb.SetBuffer(bb.BackBuffer());
 
             StartGame();
             SelectStage();
-
             FreeWorld();
 
             bb.EndBlitz3D();
@@ -115,15 +111,15 @@ namespace Practico
         private void RenderBackgroundSelectLevel()
         {
             graphicMngr.RenderBackgroundSelectLevel();
-            graphicMngr.RenderLevelOptions(game.max_stage, game.levels, game.stageList.Count, game.actual_stage);
+            graphicMngr.RenderLevelOptions(game.max_stage, game.levels, game.total_stages, game.actual_stage);
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
         # region --- INITIALIZE LEVEL OPTIONS ---------------------------------------------------------------------------------------------------
         private void InitializeLevelsOptions()
         {
-            game.levels = new int[game.stageList.Count][];
-            for (int i = 0; i < game.stageList.Count; i++)
+            game.levels = new int[game.total_stages][];
+            for (int i = 0; i < game.total_stages; i++)
             {
                 game.levels[i] = new int[2];
                 game.levels[i][0] = (Constants.WIDTH / 5) * (i + 1) - Constants.LEVEL_BLOCK_WIDTH / 2;
@@ -139,7 +135,7 @@ namespace Practico
         {
             int selected = game.actual_stage;
 
-            for (int i = 0; i < game.stageList.Count; i++)
+            for (int i = 0; i < game.max_stage; i++)
             {
                 if (bb.RectsOverlap(game.levels[i][0], game.levels[i][1], Constants.PLAY_BUTTON_WIDTH, Constants.PLAY_BUTTON_HEIGHT, bb.MouseX(), bb.MouseY(), 1, 1) == 1)
                 {
@@ -153,17 +149,14 @@ namespace Practico
 
         # region --- PLAY STAGE -----------------------------------------------------------------------------------------------------------------
         private void PlayStage() {
-            graphicMngr.createStage();
-            graphicMngr.loadStage(game.getSelectedStage());
-            graphicMngr.createBomberman();
-            graphicMngr.createLights();
-            graphicMngr.createCamera();
+            Game.GetInstance().InitializeGameObjectValues();
+            graphicMngr.InitializeStage();
             
             while (bb.KeyDown(bb.KEY_ESCAPE) == 0)
             {
                 bb.UpdateWorld();
 
-                graphicMngr.walkBomberman();
+                graphicMngr.WalkBomberman();
 
                 bb.RenderWorld();
 
@@ -202,7 +195,7 @@ namespace Practico
         }*/
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
-        # region --- PLAY STAGE -----------------------------------------------------------------------------------------------------------------
+        # region --- EDIT STAGE -----------------------------------------------------------------------------------------------------------------
         public void EditStage(){
         
         }
@@ -309,7 +302,9 @@ namespace Practico
 
         public void InitializeWorld() //
         {
-
+            xmlMngr.ReadXmlConf();
+            //game.InitializeGameValues();
+            graphicMngr.InitializeGraphics();
             soundMngr.InitializeSounds();
         }
 

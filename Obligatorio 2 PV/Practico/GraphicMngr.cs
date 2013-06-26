@@ -19,6 +19,7 @@ namespace Practico
         public int BLOCK_LEVEL = 0;
         public int PLAY_BUTTON = 0;
         public int MESSAGE = 0;
+        private float SCALE = 2.04f;
 
         //--BOMBERMAN IMAGES -----------------------------------------------------------------
         int BOMBER = 0;
@@ -40,6 +41,21 @@ namespace Practico
                 instance = new GraphicMngr();
             }
             return instance;
+        }
+
+        public void InitializeGraphics()
+        {
+            LoadImages();
+            SetFont();
+        }
+
+        public void InitializeStage()
+        {
+            CreateStage();
+            LoadStage(Game.GetInstance().actualStage);
+            CreateBomberman();
+            CreateLights();
+            CreateCamera();
         }
 
         public void LoadImages()
@@ -126,7 +142,7 @@ namespace Practico
         public void RenderLevelOptions(int max_level, int[][]levels, int levels_count, int actual_level)
         {
             int i = 0;
-            for (; i <= max_level; i++)
+            for (; i < max_level; i++)
             {
                 bb.DrawImage(LEVELS, levels[i][0], levels[i][1], SELECT_LEVEL_FRAMES[i]);
             }
@@ -143,21 +159,21 @@ namespace Practico
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
 
-        public void createStage() //
+        public void CreateStage() //
         {
             int stage = bb.LoadMesh("Images//Stage//stage.3DS");
             bb.PositionEntity(stage, 0, 0.1f, 0);
         }
 
-        public void loadStage(Stage stage)
+        public void LoadStage(Stage stage)
         {
             for (int i = 0; i < stage.matrix.Length; i++)
             {
                 for (int j = 0; j < stage.matrix[i].Length; j++)
                 {
-                    if (stage.matrix[i][j] != null && stage.matrix[i][j].type == "Brick")
+                    if (stage.matrix[i][j] != null && stage.matrix[i][j].type == Cell.BLOCK)
                     {
-                        createBlock(i, (j * Constants.BLOCK_FACTOR));
+                        CreateBlock(i, (j * Constants.BLOCK_FACTOR));
                     }
                 }
             }
@@ -165,14 +181,14 @@ namespace Practico
 
         //--------------------------------------------------------------------------------
 
-        public void createLights()
+        public void CreateLights()
         {
             bb.AmbientLight(255, 255, 255);
         }
 
         //--------------------------------------------------------------------------------
 
-        public void createCamera()
+        public void CreateCamera()
         {
             CAMERA = bb.CreateCamera();
             bb.CameraClsColor(CAMERA, 189, 224, 251);
@@ -183,7 +199,7 @@ namespace Practico
 
         //--------------------------------------------------------------------------------
 
-        public void createBomberman() //
+        public void CreateBomberman() //
         {
             BOMBER = bb.LoadAnimMesh("Images//Bomberman//bomber.b3d");
             bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Y);
@@ -192,14 +208,14 @@ namespace Practico
             BOMBER_WALK = bb.ExtractAnimSeq(BOMBER, 30, 60);
         }
 
-        public void createBlock(float x, float y)
+        public void CreateBlock(float x, float z)
         {
             BLOCK = bb.LoadAnimMesh("Images//Stage//block.3DS");
-            bb.PositionEntity(BLOCK, x, 0, y);
-            bb.ScaleEntity(BLOCK, 0.7f, 1, 0.7f);
+            bb.PositionEntity(BLOCK, x*SCALE, 0, z);
+            bb.ScaleEntity(BLOCK, 1, 1, 1);
         }
 
-        public void walkBomberman()
+        public void WalkBomberman()
         {
             //Si la camara no esta en bomberman
             if (bb.KeyDown(bb.KEY_UP) == 1)

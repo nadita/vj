@@ -72,8 +72,6 @@
       </tile>
       <tile posX="16" posZ="13">
       </tile>
-      <tile posX="16" posZ="14">
-      </tile>
     </blocks>
     <powerUps>
       <tile type="MAX_SPEED" posX="3" posZ="6">
