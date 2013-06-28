@@ -12,16 +12,23 @@ namespace Practico
         public int STARTUP_BACKGROUND = 0;
         public int LEVEL_OPTION_BACKGROUND = 0;
         public int LEVEL_OPTION = 0;
-        //public int STAGE_BACKGROUND = 0;
         public int LEVELS = 0;
         public int[] SELECT_LEVEL_FRAMES = new int[9];
         public int[] SELECTED_LEVELS_FRAMES = new int[8];
         public int BLOCK_LEVEL = 0;
         public int PLAY_BUTTON = 0;
+        public int PLAY_BUTTON_X_POSITION = 0;
+        public int PLAY_BUTTON_Y_POSITION = 0;
+        public int EDIT_BUTTON = 0;
+        public int EDIT_BUTTON_X_POSITION = 0;
+        public int EDIT_BUTTON_Y_POSITION = 0;
         public int MESSAGE = 0;
+
+        int stage = 0;
 
         //--BOMBERMAN IMAGES -----------------------------------------------------------------
         int BOMBER = 0;
+        int BOMBER_SPHERE = 0;
         int BOMBER_WALK = 0;
         int BLOCK = 0;
 
@@ -41,7 +48,8 @@ namespace Practico
         //COLLISION TYPES
         private int BOMBER_TYPE = 1;
         private int ENEMIES_TYPE = 2;
-        private int STAGE_TYPE = 3;
+        private int POWERUP_TYPE = 3;
+        private int STAGE_TYPE = 4;
 
         //POWERUP IMAGES
         public int MAX_SPEED = 0;
@@ -112,7 +120,9 @@ namespace Practico
 
             PLAY_BUTTON = bb.LoadImage("Images//Play_button.png");
             bb.MaskImage(PLAY_BUTTON, 200, 0, 200);
-           
+
+            EDIT_BUTTON = bb.LoadImage("Images//Level_Editor_button.png");
+            bb.MaskImage(EDIT_BUTTON, 200, 0, 200);
         }
       
         # region --- SET FONT -------------------------------------------------------------------------------------------------------------------------------
@@ -180,17 +190,25 @@ namespace Practico
 
             bb.DrawImage(LEVELS, levels[actual_level][0], levels[actual_level][1], SELECTED_LEVELS_FRAMES[actual_level]);
 
-            bb.DrawImage(PLAY_BUTTON, Constants.WIDTH / 2 - Constants.PLAY_BUTTON_WIDTH / 2, Constants.HEIGHT - Constants.PLAY_BUTTON_HEIGHT * 3 + Constants.PLAY_BUTTON_HEIGHT / 2);
+            PLAY_BUTTON_X_POSITION = Constants.WIDTH / 2 - (3*Constants.PLAY_BUTTON_WIDTH) / 2;
+            PLAY_BUTTON_Y_POSITION = Constants.HEIGHT - Constants.PLAY_BUTTON_HEIGHT * 3 + Constants.PLAY_BUTTON_HEIGHT / 2;
+            bb.DrawImage(PLAY_BUTTON, PLAY_BUTTON_X_POSITION, PLAY_BUTTON_Y_POSITION);
+
+            EDIT_BUTTON_X_POSITION = Constants.WIDTH / 2 + (Constants.PLAY_BUTTON_WIDTH) / 2;
+            EDIT_BUTTON_Y_POSITION = Constants.HEIGHT - Constants.PLAY_BUTTON_HEIGHT * 3 + Constants.PLAY_BUTTON_HEIGHT / 2;
+            bb.DrawImage(EDIT_BUTTON, EDIT_BUTTON_X_POSITION, EDIT_BUTTON_Y_POSITION);
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+        
+        # region --- CREATE STAGE -------------------------------------------------------------------------------------------------------------------
+        public void CreateStage() //
+        {
+            stage = bb.LoadMesh("Images//Stage//stage.3DS");
+            bb.PositionEntity(stage, 0, 0.1f, 0);
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
-
-        public void CreateStage() //
-        {
-            int stage = bb.LoadMesh("Images//Stage//stage.3DS");
-            bb.PositionEntity(stage, 0, 0.1f, 0);
-        }
-
+        # region --- LOAD STAGE -------------------------------------------------------------------------------------------------------------------
         public void LoadStage(Stage stage)
         {
             for (int i = 0; i < stage.matrix.Length; i++)
@@ -204,16 +222,16 @@ namespace Practico
                 }
             }
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
-        //--------------------------------------------------------------------------------
-
+        # region --- CREATE LIGHTS -------------------------------------------------------------------------------------------------------------------
         public void CreateLights()
         {
             bb.AmbientLight(255, 255, 255);
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
-        //--------------------------------------------------------------------------------
-
+        # region --- CREATE CAMERA -------------------------------------------------------------------------------------------------------------------
         public void CreateCamera()
         {
             CAMERA = bb.CreateCamera();
@@ -221,25 +239,31 @@ namespace Practico
             bb.CameraRange(CAMERA, 0.1f, 200);
             bb.RotateEntity(CAMERA, 60, 0, 0);
             bb.PositionEntity(CAMERA, 16, 25, -30);
+            /*bb.RotateEntity(CAMERA, 60, 180, 0);
+            bb.PositionEntity(CAMERA, 0, 2, 1);*/
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
-        //--------------------------------------------------------------------------------
-
+        # region --- CREATE BOMBERMAN -------------------------------------------------------------------------------------------------------------------
         public void CreateBomberman() //
-        {
+        {            
             BOMBER = bb.LoadAnimMesh("Images//Bomberman//bomber.b3d");
             bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Z);
             bb.RotateEntity(BOMBER, 0, 270, 0);
             BOMBER_WALK = bb.ExtractAnimSeq(BOMBER, 30, 60);
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
+        # region --- CREATE BLOCK -------------------------------------------------------------------------------------------------------------------
         public void CreateBlock(float x, float z)
         {
             BLOCK = bb.LoadAnimMesh("Images//Stage//block.3DS");
             bb.PositionEntity(BLOCK, x, 0, z);
             bb.ScaleEntity(BLOCK, 1, 1, 1);
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
+        # region --- CREATE ENEMIES -------------------------------------------------------------------------------------------------------------------
         public void CreateEnemies()
         {
             foreach (Enemy enemy in Game.GetInstance().actualStage.enemies)
@@ -253,7 +277,9 @@ namespace Practico
                 }
             }
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
+        # region --- CREATE ORION -------------------------------------------------------------------------------------------------------------------
         public void CreateOrion(int x, int z) 
         {
             ORION = bb.LoadAnimMesh("Images//Orion//Orion.3ds");
@@ -261,7 +287,9 @@ namespace Practico
             /*bb.RotateEntity(ORION, 0, 270, 0);
             ORION_MOVING = bb.ExtractAnimSeq(ORION, 30, 60);*/
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
+        # region --- CREATE SIRIUS -------------------------------------------------------------------------------------------------------------------
         public void CreateSirius(float x, float z)
         {
             SIRIUS = bb.LoadAnimMesh("Images//Sirius//Sirius.3ds");
@@ -269,12 +297,51 @@ namespace Practico
             /*bb.RotateEntity(SIRIUS, 0, 270, 0);;*/
             //SIRIUS_MOVING = bb.ExtractAnimSeq(ORION, 30, 60);
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
+        # region --- CREATE COLLISIONS -------------------------------------------------------------------------------------------------------------------
         public void CreateCollisions()
         {
-            
-        }
+            bb.EntityRadius(CAMERA, 0.5f);
+            BOMBER_SPHERE = bb.CreateSphere();
+            bb.ScaleEntity(BOMBER_SPHERE, 0.5f, 1, 0.5f);
+            //bb.EntityAlpha(BOMBER_SPHERE,0);
+            bb.PositionEntity(BOMBER_SPHERE, 0, 2, 0);
+            bb.EntityParent(BOMBER, BOMBER_SPHERE);
+            bb.EntityRadius(BOMBER_SPHERE, 0.5f, 1);
 
+            /*int enemy_sphere = bb.CreateSphere();
+            bb.ScaleEntity(enemy_sphere, 0.5f, 1, 0.5f);*/
+            //bb.EntityAlpha(enemy_sphere, 0);
+            //bb.PositionEntity(enemy_sphere, 1*2.04f, 2, (-6)*2.04f);
+            //bb.EntityParent(BOMBER, BOMBER_SPHERE);
+            //bb.EntityRadius(enemy_sphere, 0.5f, 1);
+
+            //bb.EntityRadius(ORION, 1);
+            //bb.EntityRadius(SIRIUS, 4,4);
+            //FALTAN LOS OTROS
+
+            /*int cube = bb.CreateCube();
+            bb.EntityType(cube, 100);
+            bb.EntityBox(cube, 0, 0, 0, 1, 1, 1);*/
+
+            bb.EntityType(CAMERA, BOMBER_TYPE);
+            bb.EntityType(BOMBER, BOMBER_TYPE);
+            bb.EntityType(BOMBER_SPHERE, BOMBER_TYPE);
+
+            bb.EntityType(ORION, ENEMIES_TYPE);
+            bb.EntityType(SIRIUS, ENEMIES_TYPE);
+            //bb.EntityType(enemy_sphere, ENEMIES_TYPE);
+
+            //falta power ups
+            bb.EntityType(stage, STAGE_TYPE);
+
+            bb.Collisions(BOMBER_TYPE, STAGE_TYPE, bb.COLLIDE_SPHEREPOLY, bb.COLLIDE_SLIDE2);
+            bb.Collisions(BOMBER_TYPE, ENEMIES_TYPE, bb.COLLIDE_SPHEREPOLY, bb.COLLIDE_SLIDE2);
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
+        # region --- WALK BOMBERMAN -------------------------------------------------------------------------------------------------------------------
         public void WalkBomberman()
         {
             //Si la camara no esta en bomberman
@@ -283,7 +350,7 @@ namespace Practico
                 bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
                 bb.Animating(BOMBER);
                 bb.RotateEntity(BOMBER, 0, 90, 0);
-                BOMBER_Z += 0.1f;
+                BOMBER_Z += 0.1f;                
             }
 
             if (bb.KeyDown(bb.KEY_DOWN) == 1)
@@ -309,14 +376,28 @@ namespace Practico
                 bb.RotateEntity(BOMBER, 0, 0, 0);
                 BOMBER_X += 0.1f;
             }
-            bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Z);
+            bb.PositionEntity(BOMBER_SPHERE, BOMBER_X, 0, BOMBER_Z);
+            //bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Z);
         }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
+        # region --- UPDATE Bomberman -------------------------------------------------------------------------------------------------------------------
+        public void UpdateBomberman()
+        {
+            WalkBomberman();
+            //falta el resto de los chequeos
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
+        # region --- UPDATE ORION -------------------------------------------------------------------------------------------------------------------
         public void UpdateOrion()
         { }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
+        # region --- UPDATE SIRIUS -------------------------------------------------------------------------------------------------------------------
         public void UpdateSirius()
         { }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
         # region --- FREE GRAPHICS --------------------------------------------------------------------------------------------------------------------------
         /// <summary>
@@ -329,20 +410,8 @@ namespace Practico
             bb.FreeImage(LEVEL_OPTION_BACKGROUND);
             bb.FreeImage(LEVEL_OPTION);
             bb.FreeImage(PLAY_BUTTON);
-            /*bb.FreeImage(STAGE_BACKGROUND);
-            bb.FreeImage(BOMBERMAN);
-            bb.FreeImage(BOMBERMAN_DEATH);
-            bb.FreeImage(BLOCKS);
-            bb.FreeImage(ORION);
-            bb.FreeImage(ORION_DEATH);
-            bb.FreeImage(SIRIUS);
-            bb.FreeImage(SIRIUS_DEATH);
-            bb.FreeImage(LEPUS);
-            bb.FreeImage(LEPUS_DEATH);
-            bb.FreeImage(POWERUPS);
-            bb.FreeImage(DOOR);
-            bb.FreeImage(BOMB);
-            bb.FreeImage(EXPLOSION);*/
+            bb.ClearCollisions();
+            bb.bbClearWorld(1,1,1);
         }
         # endregion ----------------------------------------------------------------------------------------------------------------------------------------
     }

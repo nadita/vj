@@ -16,6 +16,8 @@ namespace Practico
         private SoundMngr soundMngr = SoundMngr.GetInstance();
         private XmlMngr xmlMngr = XmlMngr.GetInstance();
         private static GameMngr instance = null;
+        private Boolean pressedPlay = false;
+        private Boolean pressedEdit = false;
 
         //--METHODS-----------------------------------------------------------------------
 
@@ -71,15 +73,14 @@ namespace Practico
             if (game.actual_lives > 0)
             {
                 InitializeLevelsOptions();
-                Boolean playPressed = false;
-                while (!playPressed)
+                while (!pressedPlay && !pressedEdit)
                 {
                     bb.Cls();
                     RenderBackgroundSelectLevel();
                     bb.Flip();
                     bb.WaitMouse();
-                    playPressed = PressPlay();
-                    if (!playPressed)
+                    PressOption();
+                    if (!pressedPlay && !pressedEdit)
                     {
                         int newSelectedLevel = SelectLevel();
                         if (game.actual_stage != newSelectedLevel)
@@ -151,6 +152,7 @@ namespace Practico
             while (bb.KeyDown(bb.KEY_ESCAPE) == 0)
             {
                 UpdateStage();
+
                 bb.UpdateWorld();
 
                 bb.RenderWorld();
@@ -221,17 +223,17 @@ namespace Practico
             while (!playPressed)
             {
                 bb.Cls();
-                graphicMngr.RenderMessage("Press E to Edit or P to Play!");
+                //graphicMngr.RenderMessage("Press E to Edit or P to Play!");
                 bb.Flip();
                 bb.FlushKeys();
-                bb.WaitKey();
-                if (bb.KeyHit(bb.KEY_E) == 1)
+                //bb.WaitKey();
+                if (/*bb.KeyHit(bb.KEY_E) == 1*/ pressedEdit)
                 {
                     playPressed = true;
                     EditStage();
                 }
                 else {
-                    if (bb.KeyHit(bb.KEY_P) == 1) {
+                    if (/*bb.KeyHit(bb.KEY_P) == 1*/ pressedPlay) {
                         playPressed = true;
                         PlayStage();
                     }
@@ -244,7 +246,6 @@ namespace Practico
         # region --- MESSAGE --------------------------------------------------------------------------------------------------------------------
         private void Message()
         {
-
             //ISSUE 5: EVALUAR RESULTADO DEL JUEGO PARA SETEAR MESSAGE
             //GAME OVER: SI PERDI  Y NO TENGO MAS VIDAS
             //PANTALLA COMPLETA: SI GANE
@@ -290,25 +291,30 @@ namespace Practico
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
-        # region --- PRESS PLAY -----------------------------------------------------------------------------------------------------------------
-        private Boolean PressPlay()
+        # region --- PRESS OPTION -----------------------------------------------------------------------------------------------------------------
+        private void PressOption()
         {
-            Boolean selected = false;
             int x = bb.MouseX();
             int y = bb.MouseY();
 
-            int x_p = Constants.WIDTH / 2 - Constants.PLAY_BUTTON_WIDTH / 2;
-            int y_p = Constants.HEIGHT - Constants.PLAY_BUTTON_HEIGHT * 3 + Constants.PLAY_BUTTON_HEIGHT / 2;
+            int x_p = graphicMngr.PLAY_BUTTON_X_POSITION;
+            int y_p = graphicMngr.PLAY_BUTTON_Y_POSITION;
+
+            int x_e = graphicMngr.EDIT_BUTTON_X_POSITION;
+            int y_e = graphicMngr.EDIT_BUTTON_Y_POSITION;
 
             int x_m = Constants.PLAY_BUTTON_WIDTH;
             int y_m = Constants.PLAY_BUTTON_HEIGHT;
             if (x >= x_p && x <= x_p + x_m
                 && y >= y_p && y <= y_p + y_m)
             {
-                selected = true;
+                pressedPlay = true;
             }
-
-            return selected;
+            else if (x >= x_e && x <= x_e + x_m
+                && y >= y_e && y <= y_e + y_m)
+            {
+                pressedEdit = true;
+            }
 
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
@@ -328,7 +334,7 @@ namespace Practico
 
         public void UpdateStage()
         {
-            graphicMngr.WalkBomberman();
+            graphicMngr.WalkBomberman(); //en vez de esto, despues habria q llamar a update bomberman
             graphicMngr.UpdateOrion();
             graphicMngr.UpdateSirius();
         }
