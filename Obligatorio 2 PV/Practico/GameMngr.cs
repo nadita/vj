@@ -176,13 +176,14 @@ namespace Practico
 
             while (bb.KeyDown(bb.KEY_ESCAPE) == 0)
             {
-                UpdateStage();
+                UpdateEditStage();
 
                 bb.UpdateWorld();
 
                 bb.RenderWorld();
 
-                PostRenderMethods();
+                //PostRenderMethods();
+                AddElement();
 
                 bb.FlushKeys();
 
@@ -190,8 +191,38 @@ namespace Practico
 
                 bb.Flip();
             }
-            Message();
+            //Message();
             SelectStage();
+        }
+
+        private void AddElement() {
+
+            String x = "4"; //(int)bb.EntityY(BOMBER)+"";
+            
+            String z = "5";
+            if (bb.KeyDown(bb.KEY_A) == 0)
+            {
+                Editor.GetInstance().addBlock(x, z);
+            }
+            else {
+                if (bb.KeyDown(bb.KEY_S) == 0)
+                {
+                    Editor.GetInstance().addPowerUp(x, z);
+                }
+                else {
+                    if (bb.KeyDown(bb.KEY_D) == 0)
+                    {
+                        Editor.GetInstance().addEnemy(x, z);
+                    }
+                    else {
+                        if (bb.KeyDown(bb.KEY_F) == 0)
+                        {
+                            Editor.GetInstance().deleteItem(x, z);
+                        }
+                    }
+                }
+            }
+            
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
@@ -311,9 +342,14 @@ namespace Practico
 
         public void UpdateStage()
         {
-            graphicMngr.WalkBomberman(); //en vez de esto, despues habria q llamar a update bomberman
+            graphicMngr.UpdateKeyBoard(); //en vez de esto, despues habria q llamar a update bomberman
             graphicMngr.UpdateOrion();
             graphicMngr.UpdateSirius();
+        }
+
+        public void UpdateEditStage()
+        {
+            graphicMngr.UpdateKeyBoard();
         }
 
         public void PostRenderMethods()

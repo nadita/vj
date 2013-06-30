@@ -17,8 +17,8 @@ namespace Practico
         public const String EXTRA_POWER = "EXTRA_POWER";
 
 
-        public String type; //None, Brick, Concrete
-        public String complement; //None, Bomb, PowerUp_Speed, PowerUp_Super
+        public String type;
+        public String complement;
 
         public Cell(String type, String complement) {
             this.type = type;

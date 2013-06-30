@@ -62,8 +62,6 @@ namespace Practico
         public int EXPLOSION = 0;
 
         //--CAMERAS --------------------------------------------------------------------------
-        int CAMERA_BOMBER = 0;
-        int CAMERA_ALL = 0;
         int CAMERA = 0;
 
         private static GraphicMngr instance = null;
@@ -86,11 +84,11 @@ namespace Practico
         {
             CreateStage();
             LoadStage(Game.GetInstance().actualStage);
+            CreateCamera();
             CreateBomberman();
             CreateEnemies();
             CreateLights();
-            CreateCamera();
-            CreateCollisions();
+            //CreateCollisions();
         }
 
         public void LoadImages()
@@ -232,15 +230,13 @@ namespace Practico
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
         # region --- CREATE CAMERA -------------------------------------------------------------------------------------------------------------------
+
         public void CreateCamera()
         {
             CAMERA = bb.CreateCamera();
-            bb.CameraClsColor(CAMERA, 189, 224, 251);
-            bb.CameraRange(CAMERA, 0.1f, 200);
-            bb.RotateEntity(CAMERA, 60, 0, 0);
-            bb.PositionEntity(CAMERA, 16, 25, -30);
-            /*bb.RotateEntity(CAMERA, 60, 180, 0);
-            bb.PositionEntity(CAMERA, 0, 2, 1);*/
+            bb.PositionEntity(CAMERA, 0, 50, 0);
+            bb.CameraRange(CAMERA, 0.2f, 2000);
+
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -249,8 +245,20 @@ namespace Practico
         {            
             BOMBER = bb.LoadAnimMesh("Images//Bomberman//bomber.b3d");
             bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Z);
-            bb.RotateEntity(BOMBER, 0, 270, 0);
+            bb.RotateEntity(BOMBER, 0, 90, 0);
             BOMBER_WALK = bb.ExtractAnimSeq(BOMBER, 30, 60);
+
+            //Sphere
+            BOMBER_SPHERE = bb.CreateSphere();
+            bb.ScaleEntity(BOMBER_SPHERE, 0.5f, 1, 0.5f);
+            bb.PositionEntity(BOMBER_SPHERE, 0, BOMBER_X, BOMBER_Z);
+            bb.EntityRadius(BOMBER_SPHERE, 0.5f, 1);
+            bb.EntityParent(BOMBER, BOMBER_SPHERE);
+            
+            //Camera
+            bb.EntityParent(CAMERA, BOMBER_SPHERE);
+            bb.PositionEntity(CAMERA, 0, 2, -5);
+
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -303,13 +311,7 @@ namespace Practico
         public void CreateCollisions()
         {
             bb.EntityRadius(CAMERA, 0.5f);
-            BOMBER_SPHERE = bb.CreateSphere();
-            bb.ScaleEntity(BOMBER_SPHERE, 0.5f, 1, 0.5f);
-            //bb.EntityAlpha(BOMBER_SPHERE,0);
-            bb.PositionEntity(BOMBER_SPHERE, 0, 2, 0);
-            bb.EntityParent(BOMBER, BOMBER_SPHERE);
-            bb.EntityRadius(BOMBER_SPHERE, 0.5f, 1);
-
+            
             /*int enemy_sphere = bb.CreateSphere();
             bb.ScaleEntity(enemy_sphere, 0.5f, 1, 0.5f);*/
             //bb.EntityAlpha(enemy_sphere, 0);
@@ -323,7 +325,7 @@ namespace Practico
 
             /*int cube = bb.CreateCube();
             bb.EntityType(cube, 100);
-            bb.EntityBox(cube, 0, 0, 0, 1, 1, 1);*/
+            bb.EntityBox(cube, 0, 0, 0, 1, 1, 1);
 
             bb.EntityType(CAMERA, BOMBER_TYPE);
             bb.EntityType(BOMBER, BOMBER_TYPE);
@@ -337,54 +339,67 @@ namespace Practico
             bb.EntityType(stage, STAGE_TYPE);
 
             bb.Collisions(BOMBER_TYPE, STAGE_TYPE, bb.COLLIDE_SPHEREPOLY, bb.COLLIDE_SLIDE2);
-            bb.Collisions(BOMBER_TYPE, ENEMIES_TYPE, bb.COLLIDE_SPHEREPOLY, bb.COLLIDE_SLIDE2);
+            bb.Collisions(BOMBER_TYPE, ENEMIES_TYPE, bb.COLLIDE_SPHEREPOLY, bb.COLLIDE_SLIDE2);*/
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
         # region --- WALK BOMBERMAN -------------------------------------------------------------------------------------------------------------------
-        public void WalkBomberman()
+        public void UpdateKeyBoard()
         {
-            //Si la camara no esta en bomberman
+            float movement = 0.2f;
+            float rotation = 1;
+
             if (bb.KeyDown(bb.KEY_UP) == 1)
             {
-                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
-                bb.Animating(BOMBER);
-                bb.RotateEntity(BOMBER, 0, 90, 0);
-                BOMBER_Z += 0.1f;                
+                bb.MoveEntity(BOMBER_SPHERE, 0, 0, movement);
+                animateBomber();
             }
 
             if (bb.KeyDown(bb.KEY_DOWN) == 1)
             {
-                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
-                bb.Animating(BOMBER);
-                bb.RotateEntity(BOMBER, 0, 270, 0);
-                BOMBER_Z += -0.1f;
+                bb.MoveEntity(BOMBER_SPHERE, 0, 0, -movement);
+                animateBomber();
             }
 
             if (bb.KeyDown(bb.KEY_LEFT) == 1)
             {
-                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
-                bb.Animating(BOMBER);
-                bb.RotateEntity(BOMBER, 0, 180, 0);
-                BOMBER_X += -0.1f;
+                bb.TurnEntity(BOMBER_SPHERE, 0, rotation, 0);
             }
 
             if (bb.KeyDown(bb.KEY_RIGHT) == 1)
             {
-                bb.Animate(BOMBER, bb.ANIM_ONCE, 1, BOMBER_WALK);
-                bb.Animating(BOMBER);
-                bb.RotateEntity(BOMBER, 0, 0, 0);
-                BOMBER_X += 0.1f;
+                bb.TurnEntity(BOMBER_SPHERE, 0, -rotation, 0);
             }
-            bb.PositionEntity(BOMBER_SPHERE, BOMBER_X, 0, BOMBER_Z);
-            //bb.PositionEntity(BOMBER, BOMBER_X, 0, BOMBER_Z);
+            
+            if (bb.KeyDown(bb.KEY_1) == 1)
+            {
+                bb.AmbientLight(200, 200, 200);
+                bb.CameraClsColor(CAMERA, 220, 220, 255);
+            }
+
+            if (bb.KeyDown(bb.KEY_2) == 1)
+            {
+                bb.AmbientLight(50, 50, 50);
+                bb.CameraClsColor(CAMERA, 0, 0, 0);
+            }
+
+            /*if (bb.EntityCollided(BOMBER_SPHERE, BOMBER_TYPE) == 0)
+            {
+                bb.MoveEntity(BOMBER_SPHERE, 0, -1f, 0);
+            }*/
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
+
+        private void animateBomber(){
+            if (bb.Animating(BOMBER) == bb.BBFALSE)
+                bb.Animate(BOMBER, bb.ANIM_ONCE, 0.8f, BOMBER_WALK);
+        }
 
         # region --- UPDATE Bomberman -------------------------------------------------------------------------------------------------------------------
         public void UpdateBomberman()
         {
-            WalkBomberman();
+            UpdateKeyBoard();
             //falta el resto de los chequeos
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
