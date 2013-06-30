@@ -86,9 +86,9 @@ namespace Practico
 
         public void FreeSounds()
         {
-            bb.FreeSound(MUSIC);
-            bb.FreeSound(BOMB_EXPLOSION);
-            bb.FreeSound(INTRO);
+            //bb.FreeSound(MUSIC);
+            //bb.FreeSound(BOMB_EXPLOSION);
+            //bb.FreeSound(INTRO);
         }
     }
 }

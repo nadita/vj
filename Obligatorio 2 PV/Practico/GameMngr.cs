@@ -31,9 +31,9 @@ namespace Practico
             }
             return instance;
         }
-        # endregion -----------------------------------------------------------------------------------------------------------------------------
+        # endregion -------------------------------------------------------------------------------------------------------------------------
         
-        # region --- PLAY -----------------------------------------------------------------------------------------------------------------------
+        # region --- PLAY -------------------------------------------------------------------------------------------------------------------
         public void Play()
         {
             bb.BeginBlitz3D();
@@ -182,7 +182,9 @@ namespace Practico
 
                 bb.RenderWorld();
 
-                //PostRenderMethods();
+                bb.Text(20, 100, "Bomber X: " + (int)bb.EntityX(graphicMngr.BOMBER_SPHERE));
+                bb.Text(20, 140, "Bomber Z: " + (int)bb.EntityZ(graphicMngr.BOMBER_SPHERE));
+
                 AddElement();
 
                 bb.FlushKeys();
@@ -191,31 +193,61 @@ namespace Practico
 
                 bb.Flip();
             }
-            //Message();
-            SelectStage();
+            
+            xmlMngr.SaveXmlConf();
+            //SelectStage();
         }
 
         private void AddElement() {
 
-            String x = "4"; //(int)bb.EntityY(BOMBER)+"";
-            
-            String z = "5";
-            if (bb.KeyDown(bb.KEY_A) == 0)
+            int x = (int)bb.EntityX(graphicMngr.BOMBER_SPHERE)/2;
+            int z = (int)bb.EntityZ(graphicMngr.BOMBER_SPHERE)/2;
+
+            if (bb.KeyDown(bb.KEY_A) == 1)
             {
-                Editor.GetInstance().addBlock(x, z);
+                if (Editor.GetInstance().addBlock(x, z * (-1)))
+                {
+                    game.actualStage.addItem(new Cell(Cell.BLOCK, Cell.NONE), x, z * (-1));
+                    graphicMngr.CreateBlock(x * Constants.BLOCK_FACTOR, z * Constants.BLOCK_FACTOR);
+                }
             }
             else {
-                if (bb.KeyDown(bb.KEY_S) == 0)
+                if (bb.KeyDown(bb.KEY_S) == 1)
                 {
-                    Editor.GetInstance().addPowerUp(x, z);
-                }
-                else {
-                    if (bb.KeyDown(bb.KEY_D) == 0)
+                    String ret = Editor.GetInstance().addPowerUp(x, z * (-1));
+                    if (ret == Cell.MAX_SPEED)
                     {
-                        Editor.GetInstance().addEnemy(x, z);
+                        game.actualStage.addItem(new Cell(Cell.BLOCK, Cell.MAX_SPEED), x, z * (-1));
+                        graphicMngr.CreateBlock(x * Constants.BLOCK_FACTOR, z * Constants.BLOCK_FACTOR);
                     }
                     else {
-                        if (bb.KeyDown(bb.KEY_F) == 0)
+                        if (ret == Cell.EXTRA_POWER)
+                        {
+                            game.actualStage.addItem(new Cell(Cell.BLOCK, Cell.EXTRA_POWER), x, z * (-1));
+                            graphicMngr.CreateBlock(x * Constants.BLOCK_FACTOR, z * Constants.BLOCK_FACTOR);
+                        }
+                    }
+                }
+                else {
+                    if (bb.KeyDown(bb.KEY_D) == 1)
+                    {
+                        String ret = Editor.GetInstance().addEnemy(x, z * (-1));
+                        if (ret == Cell.SIRIUS)
+                        {
+                            game.actualStage.addItem(new Cell(Cell.ENEMY, Cell.SIRIUS), x, z * (-1));
+                            graphicMngr.CreateSirius(x, z * (-1));
+                        }
+                        else
+                        {
+                            if (ret == Cell.ORION)
+                            {
+                                game.actualStage.addItem(new Cell(Cell.ENEMY, Cell.ORION), x, z * (-1));
+                                graphicMngr.CreateSirius(x, z * (-1));
+                            }
+                        }
+                    }
+                    else {
+                        if (bb.KeyDown(bb.KEY_F) == 1)
                         {
                             Editor.GetInstance().deleteItem(x, z);
                         }

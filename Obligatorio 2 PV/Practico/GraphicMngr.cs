@@ -27,8 +27,8 @@ namespace Practico
         int stage = 0;
 
         //--BOMBERMAN IMAGES -----------------------------------------------------------------
-        int BOMBER = 0;
-        int BOMBER_SPHERE = 0;
+        public int BOMBER = 0;
+        public int BOMBER_SPHERE = 0;
         int BOMBER_WALK = 0;
         int BLOCK = 0;
 
@@ -271,6 +271,24 @@ namespace Practico
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
+        # region --- CREATE POWER UP RUN -------------------------------------------------------------------------------------------------------------------
+        public void CreatePowerUpRun(float x, float z)
+        {
+            MAX_SPEED = bb.LoadAnimMesh("Images//PowerUpRun//powerup_run.3DS");
+            bb.PositionEntity(MAX_SPEED, x, 0, z);
+            bb.ScaleEntity(MAX_SPEED, 1, 1, 1);
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
+        # region --- CREATE POWER UP EXTRA  -------------------------------------------------------------------------------------------------------------------
+        public void CreatePowerUpExtra(float x, float z)
+        {
+            EXTRA_POWER = bb.LoadAnimMesh("Images//PowerUpBomb//powerup_bomb.3DS");
+            bb.PositionEntity(EXTRA_POWER, x, 0, z);
+            bb.ScaleEntity(EXTRA_POWER, 1, 1, 1);
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
         # region --- CREATE ENEMIES -------------------------------------------------------------------------------------------------------------------
         public void CreateEnemies()
         {
@@ -382,7 +400,7 @@ namespace Practico
                 bb.AmbientLight(50, 50, 50);
                 bb.CameraClsColor(CAMERA, 0, 0, 0);
             }
-
+            
             /*if (bb.EntityCollided(BOMBER_SPHERE, BOMBER_TYPE) == 0)
             {
                 bb.MoveEntity(BOMBER_SPHERE, 0, -1f, 0);
@@ -397,11 +415,11 @@ namespace Practico
         }
 
         # region --- UPDATE Bomberman -------------------------------------------------------------------------------------------------------------------
-        public void UpdateBomberman()
+        /*public void UpdateBomberman()
         {
             UpdateKeyBoard();
             //falta el resto de los chequeos
-        }
+        }*/
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
         # region --- UPDATE ORION -------------------------------------------------------------------------------------------------------------------
@@ -421,12 +439,12 @@ namespace Practico
         public void FreeGraphics()
         {
             //STAGE IMAGES
-            bb.FreeImage(STARTUP_BACKGROUND);
-            bb.FreeImage(LEVEL_OPTION_BACKGROUND);
-            bb.FreeImage(LEVEL_OPTION);
-            bb.FreeImage(PLAY_BUTTON);
+            //bb.FreeImage(STARTUP_BACKGROUND);
+            //bb.FreeImage(LEVEL_OPTION_BACKGROUND);
+            //bb.FreeImage(LEVEL_OPTION);
+            //bb.FreeImage(PLAY_BUTTON);
             bb.ClearCollisions();
-            bb.bbClearWorld(1,1,1);
+            //bb.bbClearWorld(1,1,1);
         }
         # endregion ----------------------------------------------------------------------------------------------------------------------------------------
     }

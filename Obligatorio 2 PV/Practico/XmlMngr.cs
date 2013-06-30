@@ -163,7 +163,8 @@ namespace Practico
 
         # region --- SAVE XML CONFIGURATION -----------------------------------------------------------------------------------------------------
         public void SaveXmlConf()
-        {
+        
+{
             XmlDocument doc = new XmlDocument();
             doc.Load(bombermanGConfigXml);
 
@@ -175,7 +176,7 @@ namespace Practico
                 if (idAttribute != null)
                 {
                     Game game = Game.GetInstance();
-                    if (idAttribute.Value.CompareTo(game.actual_stage + "") == 0)
+                    if (idAttribute.Value.CompareTo((game.actual_stage+1) + "") == 0)
                     { //actual nivel
                         XmlNodeList levelData = levelNode.ChildNodes;
 
@@ -269,7 +270,7 @@ namespace Practico
                         XmlAttribute attributePosZ = enemy.Attributes["posZ"];
                         if (attributeType.Value.CompareTo(deletedEnemy[0]) == 0 && attributePosX.Value.CompareTo(deletedEnemy[1]) == 0 && attributePosZ.Value.CompareTo(deletedEnemy[2]) == 0)
                         {
-                            levelData.Item(3).RemoveChild(enemy);
+                            levelData.Item(2).RemoveChild(enemy);
                         }
                     }
                 }
@@ -282,7 +283,7 @@ namespace Practico
                 ((XmlElement)nuevo).SetAttribute("type", newEnemy[0]);
                 ((XmlElement)nuevo).SetAttribute("posX", newEnemy[1]);
                 ((XmlElement)nuevo).SetAttribute("posZ", newEnemy[2]);
-                levelData.Item(3).AppendChild(nuevo);
+                levelData.Item(2).AppendChild(nuevo);
             }
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------

@@ -26,5 +26,9 @@ namespace Practico
         {
             this.enemies.Add(c);
         }
+
+        public void deleteItem(int x, int y) {
+            this.matrix[x][y] = new Cell();
+        }
     }
 }
