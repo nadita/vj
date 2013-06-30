@@ -165,42 +165,19 @@ namespace Practico
 
                 bb.Flip();
             }
-
-           
             Message();
             SelectStage();
         }
-        /*private void PlayStage()
-        {
-            InitializeWorld(); //Load selected level
-            soundMngr.PlayMusic();
-            while (!GlobalVariables.END_TIME && !Character.BOMBERMAN_DEAD && !GlobalVariables.LEVEL_FINISHED && GlobalVariables.ACTUAL_LIVES > 0)
-            {
-                bb.Cls();
-                RenderWorld();
-                UpdateWorld();
-                UpdateTime();
-                UpdateBombs();
-                if (bb.KeyDown(bb.KEY_SPACE) != 0)
-                {
-                    ThrowBomb();
-                }
-                bb.Flip();
-            }
-            soundMngr.StopMusic();
-            UpdateLifes();
-            Message();
-            SelectStage();
-        }*/
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
         # region --- EDIT STAGE -----------------------------------------------------------------------------------------------------------------
         public void EditStage(){
-            /*InitializeStage();
+            InitializeStage();
 
             while (bb.KeyDown(bb.KEY_ESCAPE) == 0)
             {
                 UpdateStage();
+
                 bb.UpdateWorld();
 
                 bb.RenderWorld();
@@ -212,7 +189,9 @@ namespace Practico
                 bb.Color(255, 0, 0);
 
                 bb.Flip();
-            }*/
+            }
+            Message();
+            SelectStage();
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
@@ -220,20 +199,18 @@ namespace Practico
         private void SelectAction() {
 
             Boolean playPressed = false;
-            while (!playPressed)
+            Boolean editPressed = false;
+            while (!playPressed && !editPressed)
             {
                 bb.Cls();
-                //graphicMngr.RenderMessage("Press E to Edit or P to Play!");
                 bb.Flip();
-                bb.FlushKeys();
-                //bb.WaitKey();
-                if (/*bb.KeyHit(bb.KEY_E) == 1*/ pressedEdit)
+                if (pressedEdit)
                 {
-                    playPressed = true;
+                    editPressed = true;
                     EditStage();
                 }
                 else {
-                    if (/*bb.KeyHit(bb.KEY_P) == 1*/ pressedPlay) {
+                    if (pressedPlay) {
                         playPressed = true;
                         PlayStage();
                     }
