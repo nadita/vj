@@ -33,11 +33,19 @@ namespace Practico
             this.matrix[x][y] = new Cell();
         }
 
-        public void addBomb(int x, int z) {
+        public void addBomb(int x, int z, int bomb) {
             if (bombs.Count < 5 && (x % 2 == 0 || z % 2 == 0)){
-                Bomb b = new Bomb(x, z, 20);
+                Bomb b = new Bomb(x, z, 20, bomb);
                 this.bombs.Enqueue(b);
             }
+        }
+
+        public Bomb peekBomb()
+        {
+            if (bombs.Count > 0) {
+                return this.bombs.Peek();
+            }
+            return null;
         }
 
         public Bomb removeBomb() {

@@ -152,13 +152,15 @@ namespace Practico
             while (bb.KeyDown(bb.KEY_ESCAPE) == 0)
             {
                 UpdateStage();
-                PostRenderMethods();
-                addBomb();
-                exploteBomb();
-
+                
                 bb.UpdateWorld();
 
                 bb.RenderWorld();
+
+                PostRenderMethods();
+                game.updateTime();
+                addBomb();
+                exploteBomb();
 
                 bb.FlushKeys();
 
@@ -174,20 +176,22 @@ namespace Practico
             int x = (int)bb.EntityX(graphicMngr.BOMBER_SPHERE)/2;
             int z = (int)bb.EntityZ(graphicMngr.BOMBER_SPHERE)/2;
 
-            if (bb.KeyDown(bb.KEY_B) == 1)
+            if (bb.KeyHit(bb.KEY_B) == 1 && game.actualStage.bombs.Count < 5)
             {
-                    game.actualStage.addBomb(x, z * (-1));
-                    graphicMngr.CreateBomb(x, z);
+                    int bomb = graphicMngr.CreateBomb(x, z);
+                    game.actualStage.addBomb(x, z * (-1), bomb );
             }
         }
 
         private void exploteBomb() {
-            if (bb.KeyDown(bb.KEY_SPACE) == 1)
-            {
-                Bomb b = game.actualStage.removeBomb();
-                if (b != null) {
+
+            if (game.actualStage.bombs.Count > 0){
+                Bomb b = game.actualStage.peekBomb();
+
+                if (b != null && (bb.KeyHit(bb.KEY_SPACE) == 1 || b.time == 0)){
+                    game.actualStage.removeBomb();
                     graphicMngr.RemoveBomb(b);
-                }
+                } 
             }
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------

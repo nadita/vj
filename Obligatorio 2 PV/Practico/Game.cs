@@ -19,6 +19,10 @@ namespace Practico
         public int max_stage;
         public int total_stages;
 
+        //Time
+        public DateTime time_lag;
+        public int actual_time;
+
         private static Game instance = null;
 
         public static Game GetInstance()
@@ -40,6 +44,8 @@ namespace Practico
             this.actual_score = 0;
             this.max_stage = 1;
             this.total_stages = 3;
+            this.time_lag = DateTime.Now;
+            this.actual_time = 120;
         }
 
         public void InitializeGameObjectValues()
@@ -80,6 +86,20 @@ namespace Practico
             }
         }
 
+        public void updateTime() { 
+            DateTime now = DateTime.Now;
+            if (now.Subtract(this.time_lag).TotalMilliseconds >= 1000 && this.actual_time >= 0)
+            {
+                //Update actual time
+                this.actual_time--;
+                this.time_lag = DateTime.Now;
+
+                //Update bombs
+                foreach (Bomb b in actualStage.bombs) {
+                    b.time--;
+                }
+            }
+        }
 
     }
 }

@@ -135,7 +135,7 @@ namespace Practico
         # region --- HUD ------------------------------------------------------------------------------------------------------------------------------------
         public void HUD()
         {
-            bb.Text(20, 20, "Time: 00:00" + "");
+            bb.Text(20, 20, "Time: " + Game.GetInstance().actual_time);
             bb.Text(20, 40, "Lives: " + Game.GetInstance().actual_lives);
             bb.Text(20, 60, "Stage: " + (Game.GetInstance().actual_stage+1));
         }
@@ -380,10 +380,11 @@ namespace Practico
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
         # region --- CREATE BOMB -------------------------------------------------------------------------------------------------------------------
-        public void CreateBomb(float x, float z)
+        public int CreateBomb(float x, float z)
         {
-            BOMB = bb.LoadAnimMesh("Images//AcmeBomb//acmeb.b3d");
-            bb.PositionEntity(BOMB, (x * Constants.BLOCK_FACTOR), 0, (z * Constants.BLOCK_FACTOR));
+            int b = bb.LoadAnimMesh("Images//AcmeBomb//acmeb.b3d");
+            bb.PositionEntity(b, (x * Constants.BLOCK_FACTOR), 0, (z * Constants.BLOCK_FACTOR));
+            return b;
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -452,7 +453,7 @@ namespace Practico
         # endregion ----------------------------------------------------------------------------------------------------------------------------------------
 
         public void RemoveBomb(Bomb b) {
-            bb.EntityAlpha(BOMB, 0.5f);
+            bb.EntityAlpha(b.image, 0.5f);
         }
     }
 }
