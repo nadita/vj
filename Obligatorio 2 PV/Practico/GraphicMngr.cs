@@ -253,12 +253,68 @@ namespace Practico
             bb.ScaleEntity(BOMBER_SPHERE, 0.5f, 1, 0.5f);
             bb.PositionEntity(BOMBER_SPHERE, 0, BOMBER_X, BOMBER_Z);
             bb.EntityRadius(BOMBER_SPHERE, 0.5f, 1);
+            //bb.EntityAlpha(BOMBER_SPHERE, 0.0f);
             bb.EntityParent(BOMBER, BOMBER_SPHERE);
             
             //Camera
             bb.EntityParent(CAMERA, BOMBER_SPHERE);
             bb.PositionEntity(CAMERA, 0, 2, -5);
 
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
+        # region --- UPDATE KEY BOARD: MOVE BOMBERMAN -------------------------------------------------------------------------------------------------------------------
+        public void UpdateKeyBoard()
+        {
+            float movement = 0.2f;
+            float rotation = 1;
+
+            if (bb.KeyDown(bb.KEY_UP) == 1)
+            {
+                bb.MoveEntity(BOMBER_SPHERE, 0, 0, movement);
+                animateBomber();
+            }
+
+            if (bb.KeyDown(bb.KEY_DOWN) == 1)
+            {
+                bb.MoveEntity(BOMBER_SPHERE, 0, 0, -movement);
+                animateBomber();
+            }
+
+            if (bb.KeyDown(bb.KEY_LEFT) == 1)
+            {
+                bb.TurnEntity(BOMBER_SPHERE, 0, rotation, 0);
+            }
+
+            if (bb.KeyDown(bb.KEY_RIGHT) == 1)
+            {
+                bb.TurnEntity(BOMBER_SPHERE, 0, -rotation, 0);
+            }
+
+            if (bb.KeyDown(bb.KEY_1) == 1)
+            {
+                bb.AmbientLight(200, 200, 200);
+                bb.CameraClsColor(CAMERA, 220, 220, 255);
+            }
+
+            if (bb.KeyDown(bb.KEY_2) == 1)
+            {
+                bb.AmbientLight(50, 50, 50);
+                bb.CameraClsColor(CAMERA, 0, 0, 0);
+            }
+
+            /*if (bb.EntityCollided(BOMBER_SPHERE, BOMBER_TYPE) == 0)
+            {
+                bb.MoveEntity(BOMBER_SPHERE, 0, -1f, 0);
+            }*/
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
+        # region --- ANIMATE BOMBERMAN -------------------------------------------------------------------------------------------------------------------
+        private void animateBomber()
+        {
+            if (bb.Animating(BOMBER) == bb.BBFALSE)
+                bb.Animate(BOMBER, bb.ANIM_ONCE, 0.8f, BOMBER_WALK);
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -320,8 +376,14 @@ namespace Practico
         {
             SIRIUS = bb.LoadAnimMesh("Images//Sirius//Sirius.3ds");
             bb.PositionEntity(SIRIUS, (x * Constants.BLOCK_FACTOR), 0, (z * Constants.BLOCK_FACTOR * (-1f)));
-            /*bb.RotateEntity(SIRIUS, 0, 270, 0);;*/
-            //SIRIUS_MOVING = bb.ExtractAnimSeq(ORION, 30, 60);
+        }
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
+        # region --- CREATE BOMB -------------------------------------------------------------------------------------------------------------------
+        public void CreateBomb(float x, float z)
+        {
+            BOMB = bb.LoadAnimMesh("Images//AcmeBomb//acmeb.b3d");
+            bb.PositionEntity(BOMB, (x * Constants.BLOCK_FACTOR), 0, (z * Constants.BLOCK_FACTOR));
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -361,67 +423,8 @@ namespace Practico
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
-        # region --- WALK BOMBERMAN -------------------------------------------------------------------------------------------------------------------
-        public void UpdateKeyBoard()
-        {
-            float movement = 0.2f;
-            float rotation = 1;
-
-            if (bb.KeyDown(bb.KEY_UP) == 1)
-            {
-                bb.MoveEntity(BOMBER_SPHERE, 0, 0, movement);
-                animateBomber();
-            }
-
-            if (bb.KeyDown(bb.KEY_DOWN) == 1)
-            {
-                bb.MoveEntity(BOMBER_SPHERE, 0, 0, -movement);
-                animateBomber();
-            }
-
-            if (bb.KeyDown(bb.KEY_LEFT) == 1)
-            {
-                bb.TurnEntity(BOMBER_SPHERE, 0, rotation, 0);
-            }
-
-            if (bb.KeyDown(bb.KEY_RIGHT) == 1)
-            {
-                bb.TurnEntity(BOMBER_SPHERE, 0, -rotation, 0);
-            }
-            
-            if (bb.KeyDown(bb.KEY_1) == 1)
-            {
-                bb.AmbientLight(200, 200, 200);
-                bb.CameraClsColor(CAMERA, 220, 220, 255);
-            }
-
-            if (bb.KeyDown(bb.KEY_2) == 1)
-            {
-                bb.AmbientLight(50, 50, 50);
-                bb.CameraClsColor(CAMERA, 0, 0, 0);
-            }
-            
-            /*if (bb.EntityCollided(BOMBER_SPHERE, BOMBER_TYPE) == 0)
-            {
-                bb.MoveEntity(BOMBER_SPHERE, 0, -1f, 0);
-            }*/
-        }
-        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
-
-
-        private void animateBomber(){
-            if (bb.Animating(BOMBER) == bb.BBFALSE)
-                bb.Animate(BOMBER, bb.ANIM_ONCE, 0.8f, BOMBER_WALK);
-        }
-
-        # region --- UPDATE Bomberman -------------------------------------------------------------------------------------------------------------------
-        /*public void UpdateBomberman()
-        {
-            UpdateKeyBoard();
-            //falta el resto de los chequeos
-        }*/
-        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
-
+       
+       
         # region --- UPDATE ORION -------------------------------------------------------------------------------------------------------------------
         public void UpdateOrion()
         { }
@@ -447,5 +450,9 @@ namespace Practico
             //bb.bbClearWorld(1,1,1);
         }
         # endregion ----------------------------------------------------------------------------------------------------------------------------------------
+
+        public void RemoveBomb(Bomb b) {
+            bb.EntityAlpha(BOMB, 0.5f);
+        }
     }
 }

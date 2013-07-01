@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="blitz3dsdk.cs" />
+    <Compile Include="Bomb.cs" />
     <Compile Include="Cell.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Editor.cs" />

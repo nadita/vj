@@ -152,12 +152,13 @@ namespace Practico
             while (bb.KeyDown(bb.KEY_ESCAPE) == 0)
             {
                 UpdateStage();
+                PostRenderMethods();
+                addBomb();
+                exploteBomb();
 
                 bb.UpdateWorld();
 
                 bb.RenderWorld();
-
-                PostRenderMethods();
 
                 bb.FlushKeys();
 
@@ -167,6 +168,27 @@ namespace Practico
             }
             Message();
             SelectStage();
+        }
+
+        private void addBomb() {
+            int x = (int)bb.EntityX(graphicMngr.BOMBER_SPHERE)/2;
+            int z = (int)bb.EntityZ(graphicMngr.BOMBER_SPHERE)/2;
+
+            if (bb.KeyDown(bb.KEY_B) == 1)
+            {
+                    game.actualStage.addBomb(x, z * (-1));
+                    graphicMngr.CreateBomb(x, z);
+            }
+        }
+
+        private void exploteBomb() {
+            if (bb.KeyDown(bb.KEY_SPACE) == 1)
+            {
+                Bomb b = game.actualStage.removeBomb();
+                if (b != null) {
+                    graphicMngr.RemoveBomb(b);
+                }
+            }
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------
 
@@ -182,8 +204,8 @@ namespace Practico
 
                 bb.RenderWorld();
 
-                bb.Text(20, 100, "Bomber X: " + (int)bb.EntityX(graphicMngr.BOMBER_SPHERE));
-                bb.Text(20, 140, "Bomber Z: " + (int)bb.EntityZ(graphicMngr.BOMBER_SPHERE));
+                //bb.Text(20, 100, "Bomber X: " + (int)bb.EntityX(graphicMngr.BOMBER_SPHERE));
+                //bb.Text(20, 140, "Bomber Z: " + (int)bb.EntityZ(graphicMngr.BOMBER_SPHERE));
 
                 AddElement();
 
