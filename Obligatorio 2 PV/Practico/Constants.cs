@@ -28,5 +28,11 @@ namespace Practico
         public const int BLOCK_WIDTH = 64;
 
         public const float BLOCK_FACTOR = 2.04f;
+
+        //Directions
+        public const String LEFT = "LEFT";
+        public const String RIGHT = "RIGHT";
+        public const String UP = "UP";
+        public const String DOWN = "DOWN";
     }
 }

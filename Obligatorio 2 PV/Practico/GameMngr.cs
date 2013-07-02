@@ -19,10 +19,14 @@ namespace Practico
         private Boolean pressedPlay = false;
         private Boolean pressedEdit = false;
 
+        private DateTime enemies_lag;
+
         //--METHODS-----------------------------------------------------------------------
 
         # region --- GET INSTANCE -----------------------------------------------------------------------------------------------------------
-        private GameMngr() { }
+        private GameMngr() {
+            enemies_lag = DateTime.Now;
+        }
         public static GameMngr GetInstance()
         {
             if (instance == null)
@@ -159,6 +163,7 @@ namespace Practico
 
                 PostRenderMethods();
                 game.updateTime();
+                UpdateEnemies();
                 addBomb();
                 exploteBomb();
 
@@ -207,9 +212,6 @@ namespace Practico
                 bb.UpdateWorld();
 
                 bb.RenderWorld();
-
-                //bb.Text(20, 100, "Bomber X: " + (int)bb.EntityX(graphicMngr.BOMBER_SPHERE));
-                //bb.Text(20, 140, "Bomber Z: " + (int)bb.EntityZ(graphicMngr.BOMBER_SPHERE));
 
                 AddElement();
 
@@ -401,8 +403,8 @@ namespace Practico
         public void UpdateStage()
         {
             graphicMngr.UpdateKeyBoard(); //en vez de esto, despues habria q llamar a update bomberman
-            graphicMngr.UpdateOrion();
-            graphicMngr.UpdateSirius();
+            //graphicMngr.UpdateOrion();
+            //graphicMngr.UpdateSirius();
         }
 
         public void UpdateEditStage()
@@ -425,5 +427,21 @@ namespace Practico
         {
             soundMngr.FreeSounds();
         }
+
+        # region --- UPDATE ENEMIES -------------------------------------------------------------------------------------------------------------
+        private void UpdateEnemies()
+        {
+            DateTime now = DateTime.Now;
+            if (now.Subtract(this.enemies_lag).TotalMilliseconds >= 500)
+            {
+                this.enemies_lag = DateTime.Now;
+                foreach (Enemy enemy in game.actualStage.enemies)
+                {
+                    graphicMngr.MoveEnemy(enemy);
+                }
+            }
+        }
+        # endregion ---------------------------------------------------------------------------------------------------------------
     }
 }
+        

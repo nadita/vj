@@ -18,6 +18,7 @@ namespace Practico
         public int[][] levels;
         public int max_stage;
         public int total_stages;
+        
 
         //Time
         public DateTime time_lag;
@@ -46,6 +47,7 @@ namespace Practico
             this.total_stages = 3;
             this.time_lag = DateTime.Now;
             this.actual_time = 120;
+            
         }
 
         public void InitializeGameObjectValues()
@@ -81,6 +83,7 @@ namespace Practico
             {
                 int x = int.Parse(enemy[1]);
                 int y = int.Parse(enemy[2]);
+
                 Enemy newEnemy = new Enemy(enemy[0], x, y);
                 actualStage.addEnemy(newEnemy);
             }

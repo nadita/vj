@@ -11,7 +11,7 @@ namespace Practico
         public const String BLOCK = "BLOCK";
         public const String POWERUP = "POWERUP";
         public const String NONE = "NONE";
-        public const String ORION = "ORION";
+        public const String ORION = "ORION"; //REVISAR
         public const String SIRIUS = "SIRIUS";
         public const String ENEMY = "ENEMY";
         

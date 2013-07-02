@@ -23,7 +23,7 @@ namespace Practico
         public int EDIT_BUTTON_X_POSITION = 0;
         public int EDIT_BUTTON_Y_POSITION = 0;
         public int MESSAGE = 0;
-
+    
         int stage = 0;
 
         //--BOMBERMAN IMAGES -----------------------------------------------------------------
@@ -88,7 +88,7 @@ namespace Practico
             CreateBomberman();
             CreateEnemies();
             CreateLights();
-            //CreateCollisions();
+            CreateCollisions();
         }
 
         public void LoadImages()
@@ -350,32 +350,37 @@ namespace Practico
         {
             foreach (Enemy enemy in Game.GetInstance().actualStage.enemies)
             {
+                int image = 0;
                 if(enemy.type.CompareTo(Enemy.ORION)==0) {
-                    CreateOrion(enemy.position_X, enemy.position_Z);
+                    image = CreateOrion(enemy.position_X, enemy.position_Z);
+                   
                 }
                 else if (enemy.type.CompareTo(Enemy.SIRIUS) == 0)
                 {
-                    CreateSirius(enemy.position_X, enemy.position_Z);
+                    image = CreateSirius(enemy.position_X, enemy.position_Z);
                 }
+                enemy.image = image;
             }
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
         # region --- CREATE ORION -------------------------------------------------------------------------------------------------------------------
-        public void CreateOrion(int x, int z) 
+        public int CreateOrion(int x, int z) 
         {
-            ORION = bb.LoadAnimMesh("Images//Orion//Orion.3ds");
-            bb.PositionEntity(ORION, (x * Constants.BLOCK_FACTOR), 0, (z * Constants.BLOCK_FACTOR * (-1f)));
+            int orion = bb.LoadAnimMesh("Images//Orion//Orion.3ds");
+            bb.PositionEntity(orion, (x * Constants.BLOCK_FACTOR), 0, (z * Constants.BLOCK_FACTOR * (-1f)));
+            return orion;
             /*bb.RotateEntity(ORION, 0, 270, 0);
             ORION_MOVING = bb.ExtractAnimSeq(ORION, 30, 60);*/
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
         # region --- CREATE SIRIUS -------------------------------------------------------------------------------------------------------------------
-        public void CreateSirius(float x, float z)
+        public int CreateSirius(float x, float z)
         {
-            SIRIUS = bb.LoadAnimMesh("Images//Sirius//Sirius.3ds");
-            bb.PositionEntity(SIRIUS, (x * Constants.BLOCK_FACTOR), 0, (z * Constants.BLOCK_FACTOR * (-1f)));
+            int sirius = bb.LoadAnimMesh("Images//Sirius//Sirius.3ds");
+            bb.PositionEntity(sirius, (x * Constants.BLOCK_FACTOR), 0, (z * Constants.BLOCK_FACTOR * (-1f)));
+            return sirius;
         }
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -393,6 +398,22 @@ namespace Practico
         {
             bb.EntityRadius(CAMERA, 0.5f);
             
+            //Enemies
+            foreach (Enemy enemy in Game.GetInstance().actualStage.enemies)
+            {
+                /*enemy.sphere = bb.CreateSphere();
+                bb.EntityParent(enemy.sphere, enemy.image);
+                bb.PositionEntity(enemy.sphere, enemy.position_X, 1, enemy.position_Z);
+                bb.ScaleEntity(enemy.sphere, 0.2f, 0.2f, 0.2f);
+
+                bb.EntityType(enemy.sphere, ENEMIES_TYPE);*/
+            }
+
+            //Stage
+            bb.EntityType(stage, STAGE_TYPE);
+
+            bb.Collisions(ENEMIES_TYPE, STAGE_TYPE, bb.COLLIDE_SPHEREPOLY, bb.COLLIDE_SLIDE2);
+
             /*int enemy_sphere = bb.CreateSphere();
             bb.ScaleEntity(enemy_sphere, 0.5f, 1, 0.5f);*/
             //bb.EntityAlpha(enemy_sphere, 0);
@@ -425,17 +446,6 @@ namespace Practico
         # endregion -----------------------------------------------------------------------------------------------------------------------------------------
 
        
-       
-        # region --- UPDATE ORION -------------------------------------------------------------------------------------------------------------------
-        public void UpdateOrion()
-        { }
-        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
-
-        # region --- UPDATE SIRIUS -------------------------------------------------------------------------------------------------------------------
-        public void UpdateSirius()
-        { }
-        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
-
         # region --- FREE GRAPHICS --------------------------------------------------------------------------------------------------------------------------
         /// <summary>
         /// Set the images free
@@ -455,6 +465,7 @@ namespace Practico
         public void RemoveBomb(Bomb b) {
             bb.EntityAlpha(b.image, 0.0f);
             Explosion(b.x, b.y);
+            bb.FreeEntity(b.image);
            
         }
 
@@ -467,7 +478,77 @@ namespace Practico
                 bb.PositionEntity(EXPLOSION, x * Constants.BLOCK_FACTOR, 1, y * Constants.BLOCK_FACTOR * (-1));
                 bb.EntityAlpha(this.EXPLOSION, 0.0f);
             }
-            
         }
+
+        
+        # region --- MOVE ENEMY -------------------------------------------------------------------------------------------------------------------
+        public void MoveEnemy(Enemy enemy)
+        {
+            if ((enemy.position_X + 1) % 2 != 0 && (enemy.position_Z) % 2 != 0
+                && (enemy.enemy_direction == Constants.RIGHT || enemy.enemy_direction == Constants.LEFT))
+            {
+                enemy.enemy_direction = Constants.UP;
+                bb.RotateEntity(enemy.image, 0, 180, 0);
+            }
+            else
+            {
+                if ((enemy.position_X) % 2 != 0 && (enemy.position_Z + 1) % 2 != 0
+                    && (enemy.enemy_direction == Constants.UP || enemy.enemy_direction == Constants.DOWN))
+                {
+                    enemy.enemy_direction = Constants.RIGHT;
+                    bb.RotateEntity(enemy.image, 0, 270, 0);
+                }
+            }
+
+            if (enemy.enemy_direction == Constants.RIGHT)
+                enemy.position_X++;
+            if (enemy.enemy_direction == Constants.LEFT)
+                enemy.position_X--;
+            if (enemy.enemy_direction == Constants.UP)
+                enemy.position_Z++;
+            if (enemy.enemy_direction == Constants.DOWN)
+                enemy.position_Z--;
+            bb.PositionEntity(enemy.image, (enemy.position_X * Constants.BLOCK_FACTOR), 0, (enemy.position_Z * Constants.BLOCK_FACTOR * (-1f)));
+
+            
+            if ((enemy.position_X+1> 15 || enemy.inicial_x+ (enemy.position_X-enemy.inicial_x) > 5) && enemy.enemy_direction == Constants.RIGHT)
+            {
+                enemy.enemy_direction = Constants.LEFT;
+                bb.RotateEntity(enemy.image, 0, 90, 0);
+            }
+            else if ((enemy.position_X - 1 < 0 || enemy.inicial_x + (enemy.position_X - enemy.inicial_x) > 5) && enemy.enemy_direction == Constants.LEFT)
+            {
+                enemy.enemy_direction = Constants.RIGHT;
+                bb.RotateEntity(enemy.image, 0, 270, 0);
+            }
+            else if ((enemy.position_Z + 1 > 17 || enemy.inicial_z + (enemy.position_Z - enemy.inicial_z) > 5) && enemy.enemy_direction == Constants.UP)
+            {
+                enemy.enemy_direction = Constants.DOWN;
+                bb.RotateEntity(enemy.image, 0, 0, 0);
+            }
+            else if ((enemy.position_Z - 1 < 0 || enemy.inicial_z + (enemy.position_Z - enemy.inicial_z) > 5) && enemy.enemy_direction == Constants.DOWN)
+            {
+                enemy.enemy_direction = Constants.UP;
+                bb.RotateEntity(enemy.image, 0, 180, 0);
+            }
+
+            /*if ((enemy.position_X == 6 || ((enemy.position_X+1)%2!=0) && ((enemy.position_Z+1)%2!=0)) && enemy.enemy_direction == Constants.RIGHT) {
+                enemy.enemy_direction = Constants.LEFT;
+            }
+            else if ((enemy.position_X == 0 || ((enemy.position_X - 1) % 2 != 0) && ((enemy.position_Z - 1) % 2 != 0)) && enemy.position_X == 0 && enemy.enemy_direction == Constants.LEFT)
+            {
+                enemy.enemy_direction = Constants.RIGHT;
+            }
+            /*if (bb.EntityCollided(enemy.image, ENEMIES_TYPE) == 0)
+            {
+                if (enemy.enemy_direction == Constants.RIGHT)
+                    enemy.enemy_direction = Constants.LEFT;
+                else if (enemy.enemy_direction == Constants.LEFT)
+                    enemy.enemy_direction = Constants.RIGHT;
+            }*/
+        }
+
+        # endregion -----------------------------------------------------------------------------------------------------------------------------------------
+
     }
 }
