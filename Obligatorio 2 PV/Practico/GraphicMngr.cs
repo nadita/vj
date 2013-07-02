@@ -453,7 +453,21 @@ namespace Practico
         # endregion ----------------------------------------------------------------------------------------------------------------------------------------
 
         public void RemoveBomb(Bomb b) {
-            bb.EntityAlpha(b.image, 0.5f);
+            bb.EntityAlpha(b.image, 0.0f);
+            Explosion(b.x, b.y);
+           
+        }
+
+        public void Explosion(int x, int y) {
+            for (int i = 0; i < 40; i++)
+            {
+                String ii = i < 10 ? "0" + i : i+"";
+                this.EXPLOSION = bb.LoadSprite("Images//Explosion//exp_" + ii + ".png", 4);
+                bb.SpriteViewMode(EXPLOSION, 1);
+                bb.PositionEntity(EXPLOSION, x * Constants.BLOCK_FACTOR, 1, y * Constants.BLOCK_FACTOR * (-1));
+                bb.EntityAlpha(this.EXPLOSION, 0.0f);
+            }
+            
         }
     }
 }
