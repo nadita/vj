@@ -1,0 +1,343 @@
+<?xml version="1.0"?>
+<bombermanGConfiguration>
+  <scenery level="1" stage="0">
+    <blocks>
+      <tile posX="0" posZ="2">
+      </tile>
+      <tile posX="0" posZ="7">
+      </tile>
+      <tile posX="0" posZ="13">
+      </tile>
+      <tile posX="2" posZ="10">
+      </tile>
+      <tile posX="2" posZ="11">
+      </tile>
+      <tile posX="3" posZ="2">
+      </tile>
+      <tile posX="3" posZ="6">
+      </tile>
+      <tile posX="4" posZ="0">
+      </tile>
+      <tile posX="4" posZ="5">
+      </tile>
+      <tile posX="5" posZ="10">
+      </tile>
+      <tile posX="5" posZ="14">
+      </tile>
+      <tile posX="6" posZ="4">
+      </tile>
+      <tile posX="6" posZ="5">
+      </tile>
+      <tile posX="7" posZ="0">
+      </tile>
+      <tile posX="8" posZ="0">
+      </tile>
+      <tile posX="8" posZ="8">
+      </tile>
+      <tile posX="9" posZ="8">
+      </tile>
+      <tile posX="9" posZ="14">
+      </tile>
+      <tile posX="10" posZ="4">
+      </tile>
+      <tile posX="10" posZ="8">
+      </tile>
+      <tile posX="10" posZ="11">
+      </tile>
+      <tile posX="12" posZ="2">
+      </tile>
+      <tile posX="12" posZ="3">
+      </tile>
+      <tile posX="12" posZ="5">
+      </tile>
+      <tile posX="12" posZ="11">
+      </tile>
+      <tile posX="12" posZ="12">
+      </tile>
+      <tile posX="13" posZ="0">
+      </tile>
+      <tile posX="13" posZ="2">
+      </tile>
+      <tile posX="14" posZ="8">
+      </tile>
+      <tile posX="15" posZ="0">
+      </tile>
+      <tile posX="15" posZ="8">
+      </tile>
+      <tile posX="15" posZ="10">
+      </tile>
+      <tile posX="16" posZ="4">
+      </tile>
+      <tile posX="16" posZ="9">
+      </tile>
+      <tile posX="16" posZ="13">
+      </tile>
+    </blocks>
+    <powerUps>
+      <tile type="MAX_SPEED" posX="3" posZ="6">
+      </tile>
+      <tile type="EXTRA_POWER" posX="12" posZ="3">
+      </tile>
+    </powerUps>
+    <enemies>
+      <tile type="ORION" posX="3" posZ="12">
+      </tile>
+      <tile type="ORION" posX="6" posZ="0">
+      </tile>
+	  <tile type="ORION" posX="9" posZ="11">
+      </tile>
+	  <tile type="SIRIUS" posX="1" posZ="6">
+      </tile>
+	  <tile type="SIRIUS" posX="7" posZ="2">
+      </tile>
+	  <tile type="SIRIUS" posX="15" posZ="12">
+      </tile>
+    </enemies>
+  </scenery>
+  <scenery level="2" stage="0">
+    <blocks>
+	  <tile posX="0" posZ="7">
+      </tile>
+      <tile posX="0" posZ="8">
+      </tile>
+      <tile posX="0" posZ="11">
+      </tile>
+      <tile posX="0" posZ="14">
+      </tile>
+      <tile posX="1" posZ="2">
+      </tile>
+      <tile posX="1" posZ="14">
+      </tile>
+      <tile posX="2" posZ="0">
+      </tile>
+      <tile posX="2" posZ="7">
+      </tile>
+      <tile posX="3" posZ="0">
+      </tile>
+      <tile posX="4" posZ="6">
+      </tile>
+      <tile posX="4" posZ="9">
+      </tile>
+      <tile posX="5" posZ="2">
+      </tile>
+      <tile posX="6" posZ="2">
+      </tile>
+      <tile posX="6" posZ="3">
+      </tile>
+      <tile posX="6" posZ="12">
+      </tile>
+      <tile posX="6" posZ="13">
+      </tile>
+      <tile posX="6" posZ="14">
+      </tile>
+      <tile posX="7" posZ="14">
+      </tile>
+      <tile posX="8" posZ="3">
+      </tile>
+      <tile posX="8" posZ="7">
+      </tile>
+      <tile posX="8" posZ="8">
+      </tile>
+      <tile posX="9" posZ="0">
+      </tile>
+      <tile posX="9" posZ="12">
+      </tile>
+      <tile posX="10" posZ="0">
+      </tile>
+      <tile posX="10" posZ="6">
+      </tile>
+      <tile posX="10" posZ="7">
+      </tile>
+      <tile posX="12" posZ="3">
+      </tile>
+      <tile posX="12" posZ="4">
+      </tile>
+      <tile posX="12" posZ="10">
+      </tile>
+      <tile posX="12" posZ="14">
+      </tile>
+      <tile posX="13" posZ="6">
+      </tile>
+      <tile posX="13" posZ="12">
+      </tile>
+      <tile posX="13" posZ="14">
+      </tile>
+      <tile posX="14" posZ="6">
+      </tile>
+      <tile posX="15" posZ="4">
+      </tile>
+      <tile posX="15" posZ="14">
+      </tile>
+      <tile posX="16" posZ="0">
+      </tile>
+      <tile posX="16" posZ="1">
+      </tile>
+      <tile posX="16" posZ="10">
+      </tile>
+      <tile posX="16" posZ="11">
+      </tile>
+    </blocks>
+    <powerUps>
+      <tile type="MAX_SPEED" posX="0" posZ="7">
+      </tile>
+      <tile type="EXTRA_POWER" posX="12" posZ="4">
+      </tile>
+    </powerUps>
+    <enemies>
+      <tile type="ORION" posX="4" posZ="10">
+      </tile>
+      <tile type="ORION" posX="7" posZ="0">
+      </tile>
+      <tile type="ORION" posX="8" posZ="6">
+      </tile>
+      <tile type="ORION" posX="10" posZ="11">
+      </tile>
+      <tile type="SIRIUS" posX="2" posZ="12">
+      </tile>
+      <tile type="SIRIUS" posX="3" posZ="4">
+      </tile>
+      <tile type="SIRIUS" posX="5" posZ="8">
+      </tile>
+      <tile type="SIRIUS" posX="11" posZ="2">
+      </tile>
+      <tile type="SIRIUS" posX="14" posZ="8">
+      </tile>
+    </enemies>
+  </scenery>
+  <scenery level="3" stage="0">
+    <blocks>
+      <tile posX="0" posZ="2">
+      </tile>
+      <tile posX="0" posZ="3">
+      </tile>
+      <tile posX="0" posZ="10">
+      </tile>
+      <tile posX="0" posZ="11">
+      </tile>
+      <tile posX="0" posZ="12">
+      </tile>
+      <tile posX="1" posZ="12">
+      </tile>
+      <tile posX="1" posZ="14">
+      </tile>
+      <tile posX="2" posZ="6">
+      </tile>
+      <tile posX="2" posZ="12">
+      </tile>
+      <tile posX="3" posZ="0">
+      </tile>
+      <tile posX="3" posZ="2">
+      </tile>
+      <tile posX="3" posZ="6">
+      </tile>
+      <tile posX="3" posZ="8">
+      </tile>
+      <tile posX="4" posZ="2">
+      </tile>
+      <tile posX="4" posZ="10">
+      </tile>
+      <tile posX="5" posZ="2">
+      </tile>
+      <tile posX="5" posZ="10">
+      </tile>
+      <tile posX="5" posZ="12">
+      </tile>
+      <tile posX="5" posZ="14">
+      </tile>
+      <tile posX="6" posZ="2">
+      </tile>
+      <tile posX="6" posZ="4">
+      </tile>
+      <tile posX="7" posZ="8">
+      </tile>
+      <tile posX="8" posZ="5">
+      </tile>
+      <tile posX="8" posZ="6">
+      </tile>
+      <tile posX="8" posZ="8">
+      </tile>
+      <tile posX="9" posZ="0">
+      </tile>
+      <tile posX="9" posZ="8">
+      </tile>
+      <tile posX="9" posZ="12">
+      </tile>
+      <tile posX="10" posZ="3">
+      </tile>
+      <tile posX="10" posZ="8">
+      </tile>
+      <tile posX="10" posZ="9">
+      </tile>
+      <tile posX="10" posZ="12">
+      </tile>
+      <tile posX="12" posZ="2">
+      </tile>
+      <tile posX="12" posZ="3">
+      </tile>
+      <tile posX="12" posZ="5">
+      </tile>
+      <tile posX="12" posZ="7">
+      </tile>
+      <tile posX="13" posZ="10">
+      </tile>
+      <tile posX="13" posZ="14">
+      </tile>
+      <tile posX="14" posZ="4">
+      </tile>
+      <tile posX="14" posZ="5">
+      </tile>
+      <tile posX="14" posZ="7">
+      </tile>
+      <tile posX="14" posZ="8">
+      </tile>
+      <tile posX="14" posZ="9">
+      </tile>
+      <tile posX="14" posZ="12">
+      </tile>
+      <tile posX="14" posZ="14">
+      </tile>
+      <tile posX="15" posZ="0">
+      </tile>
+      <tile posX="15" posZ="4">
+      </tile>
+      <tile posX="16" posZ="0">
+      </tile>
+      <tile posX="16" posZ="3">
+      </tile>
+      <tile posX="16" posZ="4">
+      </tile>
+    </blocks>
+    <powerUps>
+      <tile type="MAX_SPEED" posX="4" posZ="2">
+      </tile>
+      <tile type="EXTRA_POWER" posX="10" posZ="8">
+      </tile>
+    </powerUps>
+    <enemies>
+      <tile type="ORION" posX="0" posZ="13">
+      </tile>
+      <tile type="ORION" posX="4" posZ="1">
+      </tile>
+      <tile type="ORION" posX="6" posZ="11">
+      </tile>
+      <tile type="ORION" posX="8" posZ="2">
+      </tile>
+      <tile type="ORION" posX="12" posZ="12">
+      </tile>
+      <tile type="ORION" posX="16" posZ="7">
+      </tile>
+      <tile type="SIRIUS" posX="0" posZ="8">
+      </tile>
+      <tile type="SIRIUS" posX="3" posZ="4">
+      </tile>
+      <tile type="SIRIUS" posX="7" posZ="10">
+      </tile>
+      <tile type="SIRIUS" posX="10" posZ="14">
+      </tile>
+      <tile type="SIRIUS" posX="11" posZ="6">
+      </tile>
+      <tile type="SIRIUS" posX="12" posZ="0">
+      </tile>
+    </enemies>
+  </scenery>
+</bombermanGConfiguration>
